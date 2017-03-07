@@ -1,3 +1,5 @@
+var display, request;
+
 var tableTemplate = [
     // 0 h3 Name
     {
@@ -41,9 +43,45 @@ var tableTemplate = [
     {
         "tag": "hr",
         "style": "margin: 0px; background-color: #999; width: 100%;"
+    },
+    // 7 div progress
+    {
+        "tag": "div",
+        "class": "progress"
+    },
+    // 8 div progress bar
+    {
+        "tag": "div",
+        "id": "progressBar",
+        "class": "progress-bar",
+        "role": "progressbar",
+        "aria-valuenow": "0",
+        "aria-valuemin": "0",
+        "aria-valuemax": "100",
+        "style": "width: 70%"
     }
 ];
 
-function findResult() {
+window.onload = function() {
+    display = document.getElementById("Display");
+    request = new XMLHttpRequest();
+    request.addEventListerner("progress", updateProgress);
+    request.addEventListerner("load", transferComplete);
+    request.addEventListerner("error", transferFailed);
+}
+
+function updateProgress() {
     
+}
+
+function transferComplete() {
+    // Remove progress bar and add table
+}
+
+function transferFailed() {
+    
+}
+
+function findResult() {
+    // Initiate request and add progress bar
 }
