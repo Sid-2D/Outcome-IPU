@@ -3,9 +3,193 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel = "stylesheet" type = "text/css" href = "resources/css/bootstrap.css" />
-        <link rel = "stylesheet" type = "text/css" href = "resources/css/animation.css" />
-        <script type ="text/javascript" src = "resources/js/index.js"></script>
+        <link rel = "stylesheet" type = "text/css" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+        <link rel = "stylesheet" type = "text/css" href = "Resources/css/animation.css" />
+        <script type ="text/javascript" src = "Resources/js/index.js"></script>
+        <script type="text/javascript">
+            var display, request;
+            var tableTemplate = [
+                // 0 h3 Name
+                {
+                    "tag": "h3",
+                    "id": "Name",
+                    "style": "color: #999; animation: fadeIn 4s",
+                    "text": ""
+                },
+                // 1 h4 Sem
+                {
+                    "tag": "h4",
+                    "id": "Sem",
+                    "style": "color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px",
+                    "text": ""
+                },
+                // 2 div-table
+                {
+                    "tag": "div",
+                    "class": "table-responsive"
+                },
+                // 3 table
+                {
+                    "tag": "table",
+                    "class": "table",
+                    "style": "color: #fff; animation: fadeIn 10s"
+                },
+                // 4 div resultFooter
+                {
+                    "tag": "div",
+                    "id": "resultFooter",
+                    "style": "animation: fadeIn 7s;"
+                },
+                // 5 h4 Total
+                {
+                    "tag": "h4",
+                    "id": "Total",
+                    "style": "color:#999; text-align: left; margin-left: 5px",
+                    "text": ""
+                },
+                // 6 hr
+                {
+                    "tag": "hr",
+                    "style": "margin: 0px; background-color: #999; width: 100%;"
+                },
+                // 7 div progress
+                {
+                    "tag": "div",
+                    "class": "progress"
+                },
+                // 8 div progress bar
+                {
+                    "tag": "div",
+                    "id": "progressBar",
+                    "class": "progress-bar",
+                    "role": "progressbar",
+                    "aria-valuenow": "0",
+                    "aria-valuemin": "0",
+                    "aria-valuemax": "100",
+                    "style": "width: 70%"
+                }
+            ];
+
+            window.onload = function() {
+                display = document.getElementById("Display");
+                request = new XMLHttpRequest();
+                request.addEventListener("progress", updateProgress);
+                request.addEventListener("load", transferComplete);
+                request.addEventListener("error", transferFailed);
+            }
+
+            function updateProgress() {
+                
+            }
+
+            function transferComplete() {
+                // Remove progress bar and add table
+            }
+
+            function transferFailed() {
+                
+            }
+
+            function findResult() {
+                // Initiate request and add progress bar
+            }
+        </script>
+        <style type="text/css">
+            @-webkit-keyframes bounceIn { 
+                0% { 
+                    opacity: 0; 
+                    -webkit-transform: scale(.3); 
+                } 
+                50% { 
+                    opacity: 1; 
+                    -webkit-transform: scale(1.05); 
+                } 
+                70% { 
+                    -webkit-transform: scale(.9); 
+                } 
+                100% { 
+                     -webkit-transform: scale(1); 
+                } 
+            } 
+
+            @keyframes bounceIn { 
+                0% { 
+                    opacity: 0; 
+                    transform: scale(.3); 
+                } 
+                50% { 
+                    opacity: 1; 
+                    transform: scale(1.05); 
+                } 
+                70% { 
+                    transform: scale(.9); 
+                } 
+                100% { 
+                    transform: scale(1); 
+                } 
+            } 
+
+            @-webkit-keyframes fadeOut { 
+                0% {
+                    opacity: 1;
+                } 
+                100% {
+                    opacity: 0;
+                } 
+            } 
+
+            @keyframes fadeOut { 
+                0% {
+                    opacity: 1;
+                } 
+                100% {
+                    opacity: 0;
+                } 
+            } 
+
+            @keyframes fadeIn { 
+                0% {
+                    opacity: 0;
+                } 
+                100% {
+                    opacity: 1;
+                } 
+            } 
+
+            @-webkit-keyframes bounceInRight { 
+                0% { 
+                    opacity: 0; 
+                    -webkit-transform: translateX(400px); 
+                } 
+                60% { 
+                    -webkit-transform: translateX(-30px); 
+                } 
+                80% { 
+                    -webkit-transform: translateX(10px); 
+                } 
+                100% {
+                    opacity: 1;
+                    -webkit-transform: translateX(0); 
+                } 
+            } 
+
+            @keyframes bounceInRight { 
+                0% { 
+                    opacity: 0; 
+                    transform: translateX(400px); 
+                } 
+                60% { 
+                    transform: translateX(-30px); 
+                } 
+                80% { 
+                    transform: translateX(10px); 
+                } 
+                100% {
+                    opacity: 1;
+                    transform: translateX(0); 
+                } 
+            }
+        </style>
     </head>
     <body style = "background-color: #333;overflow-x: hidden">
         <div class = "" style = "text-align: center">            

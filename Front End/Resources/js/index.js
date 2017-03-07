@@ -65,9 +65,9 @@ var tableTemplate = [
 window.onload = function() {
     display = document.getElementById("Display");
     request = new XMLHttpRequest();
-    request.addEventListerner("progress", updateProgress);
-    request.addEventListerner("load", transferComplete);
-    request.addEventListerner("error", transferFailed);
+    request.addEventListener("progress", updateProgress);
+    request.addEventListener("load", transferComplete);
+    request.addEventListener("error", transferFailed);
 }
 
 function updateProgress() {
