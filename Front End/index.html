@@ -10,24 +10,24 @@
         <script type ="text/javascript" src = "resources/js/index.js"></script>
     </head>
     <body style = "background-color: #333;overflow-x: hidden">
-        <div class = "" style="text-align: center">            
-            <h1 style="color:#cccccc;animation: bounceIn 4s; text-align: center; margin: 10px">
+        <div class = "" style = "text-align: center">            
+            <h1 style = "color:#cccccc;animation: bounceIn 4s; text-align: center; margin: 10px">
                 Wikipedia API
             </h1>
             <div class = "row">
-                <div class="col-md-4 offset-md-4">
-                    <form class="form-inline" style="align-items: center; display: flex;">
-                        <div class="input-group">
-                          <input type="text" class="form-control" size="100" placeholder="Roll Number" required>
-                          <div class="input-group-btn">
-                            <button type="button" class="btn btn-danger">Search</button>
+                <div class = "col-md-4 offset-md-4">
+                    <form class = "form-inline" style = "align-items: center; display: flex;" onsubmit = "">
+                        <div class = "input-group">
+                          <input id = "rollNumber" type = "text" class = "form-control" size = "100" placeholder = "Roll Number" required>
+                          <div class = "input-group-btn">
+                            <button type = "button" class = "btn btn-danger" onclick = "findResult()">Search</button>
                           </div>
                         </div>
                     </form>
                 </div>
             </div>
             <div id = "Display">
-                <h3 id="Name" style="color:#999; animation: fadeIn 4s">hello asf  asfasdfa dfasdfa</h3>
+                <h3 id="Name" style="color:#999; animation: fadeIn 4s">Name</h3>
                 <h4 id="Sem" style="color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px">Sem 1</h4>
                 <div class="table-responsive">
                     <table style="color: #fff; animation: fadeIn 10s" class="table">
@@ -64,9 +64,10 @@
                         </tbody>
                     </table>
                 </div>
-                <h4 id="Total" style="color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px">Aggregate: 100</h4>
-                <hr style="margin: 0px; background-color: #999; width: 100%;"><br>                  
-                <br><br><br>
+                <div id = "resultFooter" style = "animation: fadeIn 7s;">
+                    <h4 id="Total" style="color:#999; text-align: left; margin-left: 5px">Aggregate: 100</h4>
+                    <hr style="margin: 0px; background-color: #999; width: 100%;"><br> 
+                </div>
             </div>
             <!-- Experimental Card Layout
             <div id = "Display2">
