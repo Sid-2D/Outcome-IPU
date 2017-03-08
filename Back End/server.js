@@ -33,21 +33,23 @@ app.get('/:roll', function(req, res) {
 								}
 							}
 							returnDocument.push(doc);
-							console.log(JSON.stringify(returnDocument, null, 2));
 							if (index === docs.length - 1) {
 								db.close();
 								res.send(returnDocument);
 							}
 						});
 					});
+					if (docs.length === 0) {
+						db.close();
+						res.send([]);
+					}
 				} else {
 					db.close();
-					res.send({error: err});
+					res.send(err);
 				}
 			});	
 		} else {
-			db.close();
-			res.send({error: err});
+			res.send(err);
 		}
 	});
 });

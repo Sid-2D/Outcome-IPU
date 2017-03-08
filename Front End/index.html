@@ -1,8 +1,16 @@
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Outcome</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-93258126-1', 'auto');
+          ga('send', 'pageview');
+        </script>
         <link rel = "stylesheet" type = "text/css" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" />
         <script type="text/javascript">
@@ -29,7 +37,7 @@
                 {
                     "tag": "table",
                     "class": "table",
-                    "style": "color: #fff; animation: fadeIn 10s"
+                    "style": "color: #fff; animation: fadeIn 6s"
                 },
                 // 4 div resultFooter
                 {
@@ -74,15 +82,28 @@
             }
 
             function transferFailed() {
-                
+                removeProgressBar();
+                var msg = document.createElement(Template[0].tag);
+                setHtml(0, msg);
+                console.log(request.response);
+                msg.innerHTML = "An error occured.";
+                display.appendChild(msg);
             }
 
             function findResult() {
                 // Initiate request and add progress bar
                 var roll = document.getElementById('rollNumber').value;
                 addProgressBar();
-                request.open('GET', '/' + roll, true);
-                request.send();
+                if (/^\d{11}$/.test(roll)) {
+                    request.open('GET', '/' + roll, true);
+                    request.send();
+                } else {
+                    removeProgressBar();
+                    var msg = document.createElement(Template[0].tag);
+                    setHtml(0, msg);
+                    msg.innerHTML = "Please enter valid roll number.";
+                    display.appendChild(msg);
+                }
             }
 
             function addProgressBar() {
@@ -104,62 +125,76 @@
             }
 
             function addNameAndTables() {
-                var student = JSON.parse(request.response);
-                // Name
-                var name = document.createElement(Template[0].tag);
-                setHtml(0, name);
-                name.innerHTML = student[0].Name;
-                display.appendChild(name);
-                var tableEntries = ['Name', 'Internal', 'External', 'Total'];
-                // Table
-                for (let i = 0; i < student.length; i++) {
-                    // Sem
-                    var sem = document.createElement(Template[1].tag);
-                    setHtml(1, sem);
-                    sem.innerHTML = 'Sem ' + student[i].Semester;
-                    display.appendChild(sem);
+                try {
+                    var student = JSON.parse(request.response);
+                    if (student.length === 0) {
+                        var msg = document.createElement(Template[0].tag);
+                        setHtml(0, msg);
+                        msg.innerHTML = "Sorry, no result found.";
+                        display.appendChild(msg);
+                        return;
+                    }
+                    // Name
+                    var name = document.createElement(Template[0].tag);
+                    setHtml(0, name);
+                    name.innerHTML = student[0].Name;
+                    display.appendChild(name);
+                    var tableEntries = ['Name', 'Internal', 'External', 'Total'];
                     // Table
-                    var tableContainer = document.createElement(Template[2].tag);
-                    setHtml(2, tableContainer);
-                    var table = document.createElement(Template[3].tag);
-                    setHtml(3, table);
-                    var thead = document.createElement("thead");
-                    var tbody = document.createElement("tbody");
-                    var tr = document.createElement("tr");
-                    setHeaders();
-                    // Start populating table
-                    var totalMarks = 0;
-                    for (let j = 0; j < student[i].Marks.length; j++) {
-                        tr = document.createElement("tr");
-                        var th = document.createElement("th");
-                        th.setAttribute("scope", "row");
-                        th.innerHTML = j + 1;
-                        tr.appendChild(th);
-                        totalMarks += parseInt(student[i].Marks[j].Total);
-                        for (let k = 0; k < 4; k++) {
-                            var td = document.createElement("td");
-                            td.innerHTML = student[i].Marks[j][tableEntries[k]];
-                            tr.appendChild(td);
+                    for (let i = 0; i < student.length; i++) {
+                        // Sem
+                        var sem = document.createElement(Template[1].tag);
+                        setHtml(1, sem);
+                        sem.innerHTML = 'Sem ' + student[i].Semester;
+                        display.appendChild(sem);
+                        // Table
+                        var tableContainer = document.createElement(Template[2].tag);
+                        setHtml(2, tableContainer);
+                        var table = document.createElement(Template[3].tag);
+                        setHtml(3, table);
+                        var thead = document.createElement("thead");
+                        var tbody = document.createElement("tbody");
+                        var tr = document.createElement("tr");
+                        setHeaders();
+                        // Start populating table
+                        var totalMarks = 0;
+                        for (let j = 0; j < student[i].Marks.length; j++) {
+                            tr = document.createElement("tr");
+                            var th = document.createElement("th");
+                            th.setAttribute("scope", "row");
+                            th.innerHTML = j + 1;
+                            tr.appendChild(th);
+                            totalMarks += parseInt(student[i].Marks[j].Total);
+                            for (let k = 0; k < 4; k++) {
+                                var td = document.createElement("td");
+                                td.innerHTML = student[i].Marks[j][tableEntries[k]];
+                                tr.appendChild(td);
+                            }
+                            tbody.appendChild(tr);
                         }
-                        tbody.appendChild(tr);
+                        table.appendChild(tbody);
+                        // Add table to display
+                        tableContainer.appendChild(table);
+                        display.appendChild(tableContainer);
+                        // If regular, add footer
+                        if (/regular/gi.test(student[i].Examination)) {
+                            var footer = document.createElement(Template[4].tag);
+                            setHtml(4, footer);
+                            var total = document.createElement(Template[5].tag);
+                            setHtml(5, total);
+                            total.innerHTML = "Aggregate: " + totalMarks / student[i].Marks.length;
+                            footer.appendChild(total);
+                            var hr = document.createElement(Template[6].tag);
+                            setHtml(6, hr);
+                            footer.appendChild(hr);
+                            display.appendChild(footer);
+                        }
                     }
-                    table.appendChild(tbody);
-                    // Add table to display
-                    tableContainer.appendChild(table);
-                    display.appendChild(tableContainer);
-                    // If regular, add footer
-                    if (/regular/gi.test(student[i].Examination)) {
-                        var footer = document.createElement(Template[4].tag);
-                        setHtml(4, footer);
-                        var total = document.createElement(Template[5].tag);
-                        setHtml(5, total);
-                        total.innerHTML = "Aggregate: " + totalMarks / student[i].Marks.length;
-                        footer.appendChild(total);
-                        var hr = document.createElement(Template[6].tag);
-                        setHtml(6, hr);
-                        footer.appendChild(hr);
-                        display.appendChild(footer);
-                    }
+                } catch (e) {
+                    var msg = document.createElement(Template[0].tag);
+                    setHtml(0, msg);
+                    msg.innerHTML = "An error occured.";
+                    display.appendChild(msg);
                 }
                 function setHeaders() {
                     var headers = ["#", "Subject", "Internal", "External", "Total"];
@@ -233,13 +268,13 @@
             }
             @keyframes loadingC {
                 0% {
-                    transform: translate(0,0);
+                    transform: translate(0, 0);
                 }
                 50% {
-                    transform: translate(0,15px);
+                    transform: translate(0, 15px);
                 }
                 100% {
-                    transform: translate(0,0);
+                    transform: translate(0, 0);
                 }
             }
         </style>
@@ -252,14 +287,14 @@
             <h4 style = "color:#cccccc;animation: fadeIn 4s; text-align: center; margin: 10px; font-family: Satisfy; text-decoration: underline;">-By Sid-2D</h4>
             <div class = "row">
                 <div class = "col-md-4 offset-md-4">
-                    <form class = "form-inline" style = "align-items: center; display: flex;">
+                    <div class = "form-inline" style = "align-items: center; display: flex;">
                         <div class = "input-group">
                           <input id = "rollNumber" type = "text" class = "form-control" size = "100" placeholder = "IPU Roll Number" required>
                           <div class = "input-group-btn">
                             <button type = "button" class = "btn btn-danger" onclick = "findResult()">Search</button>
                           </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <div id = "Display"></div>
