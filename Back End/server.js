@@ -1,5 +1,5 @@
 var app = require('express')(),
-	// MongoClient = require('mongodb').MongoClient,
+	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser'),
 	path = require('path');
 
@@ -16,9 +16,42 @@ app.get('/', function(req, res) {
 });
 
 app.get('/:roll', function(req, res) {
-	res.json({"num": 1});
+	MongoClient.connect(process.env.MONGO_URL, function (err, db) {
+		if (!err) {
+			db.collection('Student').find({'EnrollmentNumber': req.params['roll']}).toArray(function (err, docs) {
+				if (!err) {
+					var returnDocument = [];
+					docs.forEach(function(doc, index) {
+						var subIds = doc.Marks.map(obj => obj.Id);
+						db.collection('Subject').find({"_id" : {"$in" : subIds}}, {'_id': 1, 'Name': 1}).toArray(function (err, subs) {
+							for (let i = 0; i < doc.Marks.length; i++) {
+								for (let j = 0; j < subs.length; j++) {
+									if (doc.Marks[i].Id === subs[j]['_id']) {
+										doc.Marks[i].Name = subs[j].Name;
+										break;
+									}
+								}
+							}
+							returnDocument.push(doc);
+							console.log(JSON.stringify(returnDocument, null, 2));
+							if (index === docs.length - 1) {
+								db.close();
+								res.send(returnDocument);
+							}
+						});
+					});
+				} else {
+					db.close();
+					res.send({error: err});
+				}
+			});	
+		} else {
+			db.close();
+			res.send({error: err});
+		}
+	});
 });
 
-app.listen(3001, function () {
+app.listen(process.env.PORT || 3001, function () {
 	console.log("Listening on port 3001");
 });

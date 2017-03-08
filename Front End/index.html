@@ -4,24 +4,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel = "stylesheet" type = "text/css" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
-        <link rel = "stylesheet" type = "text/css" href = "Resources/css/animation.css" />
-        <script type ="text/javascript" src = "Resources/js/index.js"></script>
+        <link href="http://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" />
         <script type="text/javascript">
-            var display, request;
-            var tableTemplate = [
+            var display, request, progressBar;
+            var Template = [
                 // 0 h3 Name
                 {
                     "tag": "h3",
                     "id": "Name",
-                    "style": "color: #999; animation: fadeIn 4s",
-                    "text": ""
+                    "style": "color: #999; animation: fadeIn 4s"
                 },
                 // 1 h4 Sem
                 {
                     "tag": "h4",
                     "id": "Sem",
-                    "style": "color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px",
-                    "text": ""
+                    "style": "color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px"
                 },
                 // 2 div-table
                 {
@@ -44,46 +41,36 @@
                 {
                     "tag": "h4",
                     "id": "Total",
-                    "style": "color:#999; text-align: left; margin-left: 5px",
-                    "text": ""
+                    "style": "color:#999; text-align: left; margin-left: 5px"
                 },
                 // 6 hr
                 {
                     "tag": "hr",
                     "style": "margin: 0px; background-color: #999; width: 100%;"
                 },
-                // 7 div progress
+                // 7 div progress container
                 {
                     "tag": "div",
-                    "class": "progress"
+                    "class": "load-3",
+                    "style": "animation: fadeIn 1s; z-index: -1"
                 },
-                // 8 div progress bar
+                // 8 div progress lines
                 {
                     "tag": "div",
-                    "id": "progressBar",
-                    "class": "progress-bar",
-                    "role": "progressbar",
-                    "aria-valuenow": "0",
-                    "aria-valuemin": "0",
-                    "aria-valuemax": "100",
-                    "style": "width: 70%"
+                    "class": "line"
                 }
             ];
 
             window.onload = function() {
                 display = document.getElementById("Display");
                 request = new XMLHttpRequest();
-                request.addEventListener("progress", updateProgress);
                 request.addEventListener("load", transferComplete);
                 request.addEventListener("error", transferFailed);
             }
 
-            function updateProgress() {
-                
-            }
-
             function transferComplete() {
-                // Remove progress bar and add table
+                removeProgressBar(); 
+                addNameAndTables();
             }
 
             function transferFailed() {
@@ -92,26 +79,110 @@
 
             function findResult() {
                 // Initiate request and add progress bar
+                var roll = document.getElementById('rollNumber').value;
+                addProgressBar();
+                request.open('GET', '/' + roll, true);
+                request.send();
+            }
+
+            function addProgressBar() {
+                var progressLines = [];
+                progressBar = document.createElement(Template[7].tag);
+                setHtml(7, progressBar);
+                for (let i = 0; i < 3; i++) {
+                    progressLines.push(document.createElement(Template[8].tag));
+                    setHtml(8, progressLines[i]);
+                    progressBar.appendChild(progressLines[i]);
+                }
+                display.innerHTML = "";
+                display.appendChild(progressBar);
+            }
+
+            function removeProgressBar() {
+                progressBar.style.animation = "fadeOut 1s";
+                progressBar.style.opacity = 0;
+            }
+
+            function addNameAndTables() {
+                var student = JSON.parse(request.response);
+                // Name
+                var name = document.createElement(Template[0].tag);
+                setHtml(0, name);
+                name.innerHTML = student[0].Name;
+                display.appendChild(name);
+                var tableEntries = ['Name', 'Internal', 'External', 'Total'];
+                // Table
+                for (let i = 0; i < student.length; i++) {
+                    // Sem
+                    var sem = document.createElement(Template[1].tag);
+                    setHtml(1, sem);
+                    sem.innerHTML = 'Sem ' + student[i].Semester;
+                    display.appendChild(sem);
+                    // Table
+                    var tableContainer = document.createElement(Template[2].tag);
+                    setHtml(2, tableContainer);
+                    var table = document.createElement(Template[3].tag);
+                    setHtml(3, table);
+                    var thead = document.createElement("thead");
+                    var tbody = document.createElement("tbody");
+                    var tr = document.createElement("tr");
+                    setHeaders();
+                    // Start populating table
+                    var totalMarks = 0;
+                    for (let j = 0; j < student[i].Marks.length; j++) {
+                        tr = document.createElement("tr");
+                        var th = document.createElement("th");
+                        th.setAttribute("scope", "row");
+                        th.innerHTML = j + 1;
+                        tr.appendChild(th);
+                        totalMarks += parseInt(student[i].Marks[j].Total);
+                        for (let k = 0; k < 4; k++) {
+                            var td = document.createElement("td");
+                            td.innerHTML = student[i].Marks[j][tableEntries[k]];
+                            tr.appendChild(td);
+                        }
+                        tbody.appendChild(tr);
+                    }
+                    table.appendChild(tbody);
+                    // Add table to display
+                    tableContainer.appendChild(table);
+                    display.appendChild(tableContainer);
+                    // If regular, add footer
+                    if (/regular/gi.test(student[i].Examination)) {
+                        var footer = document.createElement(Template[4].tag);
+                        setHtml(4, footer);
+                        var total = document.createElement(Template[5].tag);
+                        setHtml(5, total);
+                        total.innerHTML = "Aggregate: " + totalMarks / student[i].Marks.length;
+                        footer.appendChild(total);
+                        var hr = document.createElement(Template[6].tag);
+                        setHtml(6, hr);
+                        footer.appendChild(hr);
+                        display.appendChild(footer);
+                    }
+                }
+                function setHeaders() {
+                    var headers = ["#", "Subject", "Internal", "External", "Total"];
+                    for (let i = 0; i < 5; i++) {
+                        var th = document.createElement("th");
+                        th.innerHTML = headers[i];
+                        tr.appendChild(th);
+                    }
+                    thead.appendChild(tr);
+                    table.appendChild(thead);
+                }
+            }
+
+            function setHtml(i, tag) {
+                var keys = Object.keys(Template[i]);
+                keys.forEach(function(key) {
+                    if (key !== 'tag') {
+                        tag.setAttribute(key, Template[i][key]);
+                    }
+                });
             }
         </script>
         <style type="text/css">
-            @-webkit-keyframes bounceIn { 
-                0% { 
-                    opacity: 0; 
-                    -webkit-transform: scale(.3); 
-                } 
-                50% { 
-                    opacity: 1; 
-                    -webkit-transform: scale(1.05); 
-                } 
-                70% { 
-                    -webkit-transform: scale(.9); 
-                } 
-                100% { 
-                     -webkit-transform: scale(1); 
-                } 
-            } 
-
             @keyframes bounceIn { 
                 0% { 
                     opacity: 0; 
@@ -128,16 +199,6 @@
                     transform: scale(1); 
                 } 
             } 
-
-            @-webkit-keyframes fadeOut { 
-                0% {
-                    opacity: 1;
-                } 
-                100% {
-                    opacity: 0;
-                } 
-            } 
-
             @keyframes fadeOut { 
                 0% {
                     opacity: 1;
@@ -146,61 +207,54 @@
                     opacity: 0;
                 } 
             } 
-
             @keyframes fadeIn { 
                 0% {
                     opacity: 0;
                 } 
                 100% {
                     opacity: 1;
-                } 
-            } 
-
-            @-webkit-keyframes bounceInRight { 
-                0% { 
-                    opacity: 0; 
-                    -webkit-transform: translateX(400px); 
-                } 
-                60% { 
-                    -webkit-transform: translateX(-30px); 
-                } 
-                80% { 
-                    -webkit-transform: translateX(10px); 
-                } 
+                }  
+            }
+            .line {
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                border-radius: 15px;
+                background-color: #4b9cdb;
+            }
+            .load-3 .line:nth-last-child(1) {
+                animation: loadingC .6s .1s linear infinite;
+            }
+            .load-3 .line:nth-last-child(2) {
+                animation: loadingC .6s .2s linear infinite;
+            }
+            .load-3 .line:nth-last-child(3) {
+                animation: loadingC .6s .3s linear infinite;
+            }
+            @keyframes loadingC {
+                0% {
+                    transform: translate(0,0);
+                }
+                50% {
+                    transform: translate(0,15px);
+                }
                 100% {
-                    opacity: 1;
-                    -webkit-transform: translateX(0); 
-                } 
-            } 
-
-            @keyframes bounceInRight { 
-                0% { 
-                    opacity: 0; 
-                    transform: translateX(400px); 
-                } 
-                60% { 
-                    transform: translateX(-30px); 
-                } 
-                80% { 
-                    transform: translateX(10px); 
-                } 
-                100% {
-                    opacity: 1;
-                    transform: translateX(0); 
-                } 
+                    transform: translate(0,0);
+                }
             }
         </style>
     </head>
-    <body style = "background-color: #333;overflow-x: hidden">
+    <body style = "background-color: #333; overflow-x: hidden;">
         <div class = "" style = "text-align: center">            
-            <h1 style = "color:#cccccc;animation: bounceIn 4s; text-align: center; margin: 10px">
-                Wikipedia API
+            <h1 style = "color:#cccccc;animation: bounceIn 4s; text-align: center; margin: 10px; font-family: Satisfy;">
+                Outcome
             </h1>
+            <h4 style = "color:#cccccc;animation: fadeIn 4s; text-align: center; margin: 10px; font-family: Satisfy; text-decoration: underline;">-By Sid-2D</h4>
             <div class = "row">
                 <div class = "col-md-4 offset-md-4">
-                    <form class = "form-inline" style = "align-items: center; display: flex;" onsubmit = "">
+                    <form class = "form-inline" style = "align-items: center; display: flex;">
                         <div class = "input-group">
-                          <input id = "rollNumber" type = "text" class = "form-control" size = "100" placeholder = "Roll Number" required>
+                          <input id = "rollNumber" type = "text" class = "form-control" size = "100" placeholder = "IPU Roll Number" required>
                           <div class = "input-group-btn">
                             <button type = "button" class = "btn btn-danger" onclick = "findResult()">Search</button>
                           </div>
@@ -208,64 +262,7 @@
                     </form>
                 </div>
             </div>
-            <div id = "Display">
-                <h3 id="Name" style="color:#999; animation: fadeIn 4s">Name</h3>
-                <h4 id="Sem" style="color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px">Sem 1</h4>
-                <div class="table-responsive">
-                    <table style="color: #fff; animation: fadeIn 10s" class="table">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Subject</th>
-                            <th>Internal</th>
-                            <th>External</th>
-                            <th>Total</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>Mark gfsgsdgsgfsg</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                          </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id = "resultFooter" style = "animation: fadeIn 7s;">
-                    <h4 id="Total" style="color:#999; text-align: left; margin-left: 5px">Aggregate: 100</h4>
-                    <hr style="margin: 0px; background-color: #999; width: 100%;"><br> 
-                </div>
-            </div>
-            <!-- Experimental Card Layout
-            <div id = "Display2">
-                <h3 id="Name1" style="color:#999; animation: fadeIn 4s">hello asf  asfasdfa dfasdfa</h3>
-                <h4 id="Sem1" style="color:#999; animation: fadeIn 7s; text-align: left">Sem 1</h4>
-                <div class="card" style="margin: 10px; background-color: #eee">
-                    <div class="card-block card-blockquote" style="text-align: left; padding: 5px;">
-                      <h4 class="card-title">AM</h4>
-                          Internal = 25<br>
-                          External = 75<br>
-                          <hr>
-                          <h5>Total = 100</h5>
-                    </div>
-                </div>
-            </div>
-            -->
+            <div id = "Display"></div>
         </div>
     </body>
 </html>
