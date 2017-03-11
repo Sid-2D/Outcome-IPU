@@ -166,10 +166,6 @@
                             th.setAttribute("scope", "row");
                             th.innerHTML = j + 1;
                             tr.appendChild(th);
-                            var marksHere = parseInt(student[i].Marks[j].Total);
-                            if (!isNaN(marksHere)) {
-                                totalMarks += marksHere;
-                            }
                             for (let k = 0; k < 4; k++) {
                                 var td = document.createElement("td");
                                 td.innerHTML = student[i].Marks[j][tableEntries[k]];
@@ -182,12 +178,12 @@
                         tableContainer.appendChild(table);
                         display.appendChild(tableContainer);
                         // If regular, add footer
-                        if (/regular/gi.test(student[i].Examination)) {
+                        if (student[i].Score !== '-') {
                             var footer = document.createElement(Template[4].tag);
                             setHtml(4, footer);
                             var total = document.createElement(Template[5].tag);
                             setHtml(5, total);
-                            total.innerHTML = "Aggregate: " + (totalMarks / student[i].Marks.length).toFixed(2);
+                            total.innerHTML = "Aggregate: " + student[i].Score;
                             footer.appendChild(total);
                             var hr = document.createElement(Template[6].tag);
                             setHtml(6, hr);
