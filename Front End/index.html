@@ -294,14 +294,15 @@
             <h4 style = "color:#ccc;animation: fadeIn 4s; text-align: center; margin: 10px; font-family: Satisfy; text-decoration: underline;">-By Sid-2D</h4>
             <div class = "row">
                 <div class = "col-md-4 offset-md-4">
-                    <div class = "form-inline" style = "align-items: center; display: flex;">
+                    <iframe name="votar" style="display:none;"></iframe>
+                    <form class = "form-inline" style = "align-items: center; display: flex; margin-bottom: 0" method = "GET" target = "votar">
                         <div class = "input-group">
                           <input id = "rollNumber" type = "text" class = "form-control" size = "100" placeholder = "IPU Roll Number" required>
                           <div class = "input-group-btn">
-                            <button type = "button" class = "btn btn-danger" onclick = "findResult()">Search</button>
+                            <button class = "btn btn-danger" onclick = "findResult()">Search</button>
                           </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div id = "Display" style="overflow-x: hidden; min-height: 50%"></div>
