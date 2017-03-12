@@ -1,4 +1,5 @@
-var display, request, progressBar;
+var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber;
+
 var Template = [
     // 0 h3 Name
     {
@@ -21,7 +22,7 @@ var Template = [
     {
         "tag": "table",
         "class": "table",
-        "style": "color: #fff; animation: fadeIn 10s"
+        "style": "color: #fff; animation: fadeIn 6s"
     },
     // 4 div resultFooter
     {
@@ -44,37 +45,61 @@ var Template = [
     {
         "tag": "div",
         "class": "load-3",
-        "style": "animation: fadeIn 1s; z-index: -1"
+        "style": "margin: 7px; margin-bottom: 0px; animation: fadeIn 1s; z-index: -1;"
     },
     // 8 div progress lines
     {
         "tag": "div",
         "class": "line"
+    },
+    // 9 div rankContainer
+    {
+        "tag": "div",
+        "style": "text-align: center; animation: fadeIn 4s"
+    },
+    // 10 button
+    {
+        "tag": "button",
+        "class": "btn btn-success",
+        "style": "z-index: -1; margin: 5px; left: 0"
     }
 ];
 
 window.onload = function() {
     display = document.getElementById("Display");
     request = new XMLHttpRequest();
-    request.addEventListener("load", transferComplete);
-    request.addEventListener("error", transferFailed);
+    request.addEventListener("load", resultTransferComplete);
+    request.addEventListener("error", resultTransferFailed);
 }
 
-function transferComplete() {
+function resultTransferComplete() {
     removeProgressBar(); 
     addNameAndTables();
 }
 
-function transferFailed() {
-    
+function resultTransferFailed() {
+    removeProgressBar();
+    var msg = document.createElement(Template[0].tag);
+    setHtml(0, msg);
+    console.log(request.response);
+    msg.innerHTML = "An error occured.";
+    display.appendChild(msg);
 }
 
 function findResult() {
     // Initiate request and add progress bar
     var roll = document.getElementById('rollNumber').value;
     addProgressBar();
-    request.open('GET', '/' + roll, true);
-    request.send();
+    if (/^\d{11}$/.test(roll)) {
+        request.open('GET', '/' + roll, true);
+        request.send();
+    } else {
+        removeProgressBar();
+        var msg = document.createElement(Template[0].tag);
+        setHtml(0, msg);
+        msg.innerHTML = "Please enter valid roll number.";
+        display.appendChild(msg);
+    }
 }
 
 function addProgressBar() {
@@ -90,68 +115,192 @@ function addProgressBar() {
     display.appendChild(progressBar);
 }
 
+function addRankProgressBar(parent) {
+    var progressLines = [];
+    progressBar = document.createElement(Template[7].tag);
+    setHtml(7, progressBar);
+    for (let i = 0; i < 3; i++) {
+        progressLines.push(document.createElement(Template[8].tag));
+        setHtml(8, progressLines[i]);
+        progressBar.appendChild(progressLines[i]);
+    }
+    parent.appendChild(progressBar);
+}
+
 function removeProgressBar() {
     progressBar.style.animation = "fadeOut 1s";
     progressBar.style.opacity = 0;
 }
 
-function addNameAndTables() {
-    var student = JSON.parse(request.response);
-    // Name
-    var name = document.createElement(Template[0].tag);
-    setHtml(0, name);
-    name.innerHTML = student[0].Name;
-    display.appendChild(name);
-    var tableEntries = ['Name', 'Internal', 'External', 'Total'];
-    // Table
-    for (let i = 0; i < student.length; i++) {
-        // Sem
-        var sem = document.createElement(Template[1].tag);
-        setHtml(1, sem);
-        sem.innerHTML = 'Sem ' + student[i].Semester;
-        display.appendChild(sem);
+function getList(Sem) {
+    Sem = '0' + Sem;
+    rankContainers[Sem].childNodes[0].style.animation = "fadeOut 1s";
+    rankContainers[Sem].childNodes[0].style.opacity = 0;
+    rankContainers[Sem].childNodes[0].onclick = "";
+    addRankProgressBar(rankContainers[Sem]);
+    var rankRequest = new XMLHttpRequest();
+    rankRequest.addEventListener("load", rankTransferComplete.bind(null, Sem, rankRequest));
+    rankRequest.addEventListener("error", rankTransferFailed.bind(null, Sem));
+    rankRequest.open('POST', '/rank', true);
+    rankRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    rankRequest.send(JSON.stringify(rankData[Sem]));
+}
+
+function rankTransferComplete(Sem, rankRequest) {
+    var node = rankContainers[Sem];
+    node.childNodes[1].style.animation = "fadeOut 1s";
+    node.childNodes[1].style.opacity = 0;
+    try {
+        var res = JSON.parse(rankRequest.response);
+        // Make table
+        var banner = document.createElement(Template[0].tag);
+        setHtml(0, banner);
+        banner.innerHTML = 'Sem ' + rankData[Sem].Semester + ' Rank List'; 
+        node.appendChild(banner);
+        var tableEntries = ['Name', 'EnrollmentNumber', 'Scores'];
         // Table
         var tableContainer = document.createElement(Template[2].tag);
         setHtml(2, tableContainer);
         var table = document.createElement(Template[3].tag);
         setHtml(3, table);
-        var thead = document.createElement("thead");
-        var tbody = document.createElement("tbody");
-        var tr = document.createElement("tr");
+        var thead = document.createElement('thead');
+        var tbody = document.createElement('tbody');
+        var tr = document.createElement('tr');
         setHeaders();
         // Start populating table
-        var totalMarks = 0;
-        for (let j = 0; j < student[i].Marks.length; j++) {
-            tr = document.createElement("tr");
-            var th = document.createElement("th");
-            th.setAttribute("scope", "row");
+        for (let j = 0; j < res.Students.length; j++) {
+            tr = document.createElement('tr');
+            if (res.Students[j].EnrollmentNumber === currentRollNumber) {
+                tr.style.background = "#999";
+            }
+            var th = document.createElement('th');
+            th.setAttribute('scope', 'row');
             th.innerHTML = j + 1;
             tr.appendChild(th);
-            totalMarks += parseInt(student[i].Marks[j].Total);
-            for (let k = 0; k < 4; k++) {
-                var td = document.createElement("td");
-                td.innerHTML = student[i].Marks[j][tableEntries[k]];
+            for (let k = 0; k < 3; k++) {
+                var td = document.createElement('td');
+                td.innerHTML = res.Students[j][tableEntries[k]];
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
         }
         table.appendChild(tbody);
-        // Add table to display
+        // Add table to current node
         tableContainer.appendChild(table);
-        display.appendChild(tableContainer);
-        // If regular, add footer
-        if (/regular/gi.test(student[i].Examination)) {
-            var footer = document.createElement(Template[4].tag);
-            setHtml(4, footer);
-            var total = document.createElement(Template[5].tag);
-            setHtml(5, total);
-            total.innerHTML = "Aggregate: " + totalMarks / student[i].Marks.length;
-            footer.appendChild(total);
-            var hr = document.createElement(Template[6].tag);
-            setHtml(6, hr);
-            footer.appendChild(hr);
-            display.appendChild(footer);
+        node.style.background = "#343f41";
+        node.appendChild(tableContainer);
+    } catch (e) {
+        console.log(e);
+        var msg = document.createElement(Template[0].tag);
+        setHtml(0, msg);
+        msg.innerHTML = "An error occured.";
+        node.appendChild(msg);
+    }
+    function setHeaders() {
+        var headers = ["#", "Name", "Roll Number", "Aggregate"];
+        for (let i = 0; i < 4; i++) {
+            var th = document.createElement("th");
+            th.innerHTML = headers[i];
+            tr.appendChild(th);
         }
+        thead.appendChild(tr);
+        table.appendChild(thead);
+    }
+}
+
+function rankTransferFailed(Sem) {
+    var node = rankContainers[Sem];
+    node.childNodes[1].style.animation = "fadeOut 1s";
+    node.childNodes[1].style.opacity = 0;
+    // Show error message
+    var msg = document.createElement(Template[0].tag);
+    setHtml(0, msg);
+    msg.innerHTML = "An error occured.";
+    node.appendChild(msg);
+}
+
+function addNameAndTables() {
+    try {
+        var student = JSON.parse(request.response);
+        currentRollNumber = student[0].EnrollmentNumber;
+        if (student.length === 0) {
+            var msg = document.createElement(Template[0].tag);
+            setHtml(0, msg);
+            msg.innerHTML = "Sorry, no result found.";
+            display.appendChild(msg);
+            return;
+        }
+        // Name
+        var name = document.createElement(Template[0].tag);
+        setHtml(0, name);
+        name.innerHTML = student[0].Name;
+        display.appendChild(name);
+        var tableEntries = ['Name', 'Internal', 'External', 'Total'];
+        // Table
+        for (let i = 0; i < student.length; i++) {
+            // Sem
+            var sem = document.createElement(Template[1].tag);
+            setHtml(1, sem);
+            sem.innerHTML = 'Sem ' + student[i].Semester;
+            display.appendChild(sem);
+            // Table
+            var tableContainer = document.createElement(Template[2].tag);
+            setHtml(2, tableContainer);
+            var table = document.createElement(Template[3].tag);
+            setHtml(3, table);
+            var thead = document.createElement("thead");
+            var tbody = document.createElement("tbody");
+            var tr = document.createElement("tr");
+            setHeaders();
+            // Start populating table
+            for (let j = 0; j < student[i].Marks.length; j++) {
+                tr = document.createElement("tr");
+                var th = document.createElement("th");
+                th.setAttribute("scope", "row");
+                th.innerHTML = j + 1;
+                tr.appendChild(th);
+                for (let k = 0; k < 4; k++) {
+                    var td = document.createElement("td");
+                    td.innerHTML = student[i].Marks[j][tableEntries[k]];
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            // Add table to display
+            tableContainer.appendChild(table);
+            display.appendChild(tableContainer);
+            // If regular, add footer
+            if (student[i].Score !== '-') {
+                var footer = document.createElement(Template[4].tag);
+                setHtml(4, footer);
+                var total = document.createElement(Template[5].tag);
+                setHtml(5, total);
+                total.innerHTML = "Aggregate: " + student[i].Score;
+                footer.appendChild(total);
+                var hr = document.createElement(Template[6].tag);
+                setHtml(6, hr);
+                footer.appendChild(hr);
+                display.appendChild(footer);
+                // Insert rank container
+                rankContainers[student[i].Semester] = document.createElement(Template[9].tag);
+                rankData[student[i].Semester] = getRankData(i);
+                setHtml(9, rankContainers[student[i].Semester]);
+                var button = document.createElement(Template[10].tag);
+                setHtml(10, button);
+                button.innerHTML = "Class List";
+                button.setAttribute("onclick", (function(Sem){return "getList("+Sem+")";})(student[i].Semester));
+                rankContainers[student[i].Semester].appendChild(button);
+                display.appendChild(rankContainers[student[i].Semester]);
+            }
+            display.appendChild(document.createElement("br"));
+            display.appendChild(document.createElement("br"));
+        }
+    } catch (e) {
+        var msg = document.createElement(Template[0].tag);
+        setHtml(0, msg);
+        msg.innerHTML = "An error occured.";
+        display.appendChild(msg);
     }
     function setHeaders() {
         var headers = ["#", "Subject", "Internal", "External", "Total"];
@@ -162,6 +311,15 @@ function addNameAndTables() {
         }
         thead.appendChild(tr);
         table.appendChild(thead);
+    }
+    function getRankData(i) {
+        return {
+            "Examination" : student[i].Examination,
+            "Semester" : student[i].Semester,
+            "Programme" : student[i].Programme,
+            "Batch" : student[i].Batch,
+            "CollegeCode" : student[i].CollegeCode
+        }
     }
 }
 
