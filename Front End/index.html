@@ -350,6 +350,10 @@
             }
         </script>
         <style type="text/css">
+            html {
+              height: 100%;
+              box-sizing: border-box;
+            }
             @keyframes bounceIn { 
                 0% { 
                     opacity: 0; 
@@ -424,7 +428,7 @@
                         <div class="input-group">
                           <input id="rollNumber" type="text" class="form-control" size="100" placeholder="IPU Roll Number" required="">
                           <div class="input-group-btn">
-                            <button class="btn btn-danger" onclick="findResult()">Search</button>
+                            <input type="submit" class="btn btn-danger" onclick="findResult()" value="Search" />
                           </div>
                         </div>
                     </form>
