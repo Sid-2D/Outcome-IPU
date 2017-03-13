@@ -415,7 +415,7 @@
             }
         </style>
     </head>
-    <body style="background-color: #282f31; overflow-x: hidden; position: relative; padding-bottom: 6rem;">
+    <body style="background-color: #282f31; min-height: 100%; overflow-x: hidden; position: relative; padding-bottom: 6rem;">
         <div class="" style="text-align: center; overflow-x: hidden;">            
             <h1 style="color:#ccc; animation: bounceIn 4s;font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
                 Outcome
@@ -428,13 +428,14 @@
                         <div class="input-group">
                           <input id="rollNumber" type="text" class="form-control" size="100" placeholder="IPU Roll Number" required="">
                           <div class="input-group-btn">
-                            <input type="submit" class="btn btn-danger" onclick="findResult()" value="Search" />
+                            <button type="submit" class="btn btn-danger" onclick="findResult()"> Search </button>
                           </div>
                         </div>
                     </form>
                 </div>
             </div>
             <div id="Display" style="overflow-x: hidden; min-height: 50%"></div>
+        </div>
         <div id="Footer" style="overflow: hidden; position: absolute; right: 0; bottom: 0; left: 0; padding: 1rem; background-color: #efefef; text-align: center;">
             <a href="https://github.com/Sid-2D/IPU-Result-Parser" onclick="window.open(this.href); return false;">Support this open source project here</a>
         </div>
