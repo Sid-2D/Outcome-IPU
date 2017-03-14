@@ -275,6 +275,11 @@
                     tableContainer.appendChild(table);
                     node.style.background = "#343f41";
                     node.appendChild(tableContainer);
+                    // Class Average
+                    var total = document.createElement(Template[5].tag);
+                    setHtml(5, total);
+                    total.innerHTML = "Class Average: " + (res.Aggregate / res.Students.length).toFixed(2);
+                    node.appendChild(total);
                 } catch (e) {
                     console.log(e);
                     var msg = document.createElement(Template[0].tag);
