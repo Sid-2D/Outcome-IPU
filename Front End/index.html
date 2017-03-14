@@ -308,7 +308,6 @@
             function addNameAndTables() {
                 try {
                     var student = JSON.parse(request.response);
-                    currentRollNumber = student[0].EnrollmentNumber;
                     if (student.length === 0) {
                         var msg = document.createElement(Template[0].tag);
                         setHtml(0, msg);
@@ -316,6 +315,7 @@
                         display.appendChild(msg);
                         return;
                     }
+                    currentRollNumber = student[0].EnrollmentNumber;
                     // Name
                     var name = document.createElement(Template[0].tag);
                     setHtml(0, name);
