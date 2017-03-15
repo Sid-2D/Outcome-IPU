@@ -1,5 +1,4 @@
-<link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
-<h1 style="color:#000; font-size: 50px; text-align: center; font-family: Satisfy; margin: 0">Outcome - IPU</h1>
+# Outcome for IPU
 
 A single page [web app](https://outcome-ipu.herokuapp.com) that provides results to IP University students in a tabular form and also displays the class list of the student. All it needs is the student's Roll Number and it fetches all the results available in the database.
 
