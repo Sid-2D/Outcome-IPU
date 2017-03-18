@@ -1,8 +1,9 @@
 var app = require('express')(),
 	request = require('request'),
-	cheerio = require('cheerio');
+	cheerio = require('cheerio'),
+	router = require('express').Router();
 
-app.get('/', function (req, res) {
+router.get('/', function (req, res) {
 	request('http://164.100.158.135/ExamResults/ExamResultsmain.htm', function (err, response, html) {
 		if (err) {
 			return res.send(err);
@@ -17,7 +18,7 @@ app.get('/', function (req, res) {
 				}
 				var a = trowsOnPage[i].children[1].children[1];
 				var obj = {};
-				obj.link =  'http://164.100.158.135/ExamResults' + a.attribs['href'];
+				obj.link =  'http://164.100.158.135/ExamResults/' + a.attribs['href'];
 				obj.name = a.children[0].data;
 				newLinks.push(obj);
 			}
@@ -29,14 +30,16 @@ app.get('/', function (req, res) {
        		return false;
        	});
         console.log(linksToReturn);
-		res.json(linksToReturn);
+		res.render('index.ejs', {
+			newLinks: linksToReturn ,
+	      	colors : [
+	      		"list-group-item-success",
+				"list-group-item-info",
+				"list-group-item-warning",
+				"list-group-item-danger"
+	      	]
+		});
 	});
 });
 
-app.listen(process.env.PORT || 3001, err => {
-	if (err) {
-		console.log(error);
-	} else {
-		console.log('Listening on port 3001...');
-	}
-});
+module.exports = router;

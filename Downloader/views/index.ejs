@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Result Downloader</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#282f31">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    </head>
+    <body style="background-color: #282f31">
+    	<h1 style="color:#ccc; font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy; text-decoration: underline;">
+            Updated Links:
+        </h1>
+    	<div class="list-group">
+    	  	<% newLinks.forEach(function (newLink) { %>
+    	  		<a href=<%= newLink.link %> class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 4)] %>" download=<%= newLink.name %> ><%= newLink.name %></a> 
+    	  	<% }); %>
+    	</div>
+    </body>
+</html>

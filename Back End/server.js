@@ -1,15 +1,22 @@
 var app = require('express')(),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser'),
-	path = require('path');
-	
+	path = require('path'),
+	downloader = require('../Downloader/app.js');
+
+app.set('view engine', 'ejs');
+
 app.use(bodyParser.json());
+
+app.set('views', path.join(__dirname, '/../Downloader/views'));
 
 app.use(function(req, res, next) {
 	res.header("Allow-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
 });
+
+app.use('/download', downloader);
 
 app.get('/', function(req, res) {
 	res.sendFile(path.join(__dirname + '/../Front End/index.html'));
