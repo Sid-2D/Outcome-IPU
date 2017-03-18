@@ -1,3 +1,7 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
 @keyframes bounceIn { 
     0% { 
         opacity: 0; 

@@ -29,10 +29,10 @@ router.get('/', function (req, res) {
        		}
        		return false;
        	});
-        console.log(linksToReturn);
 		res.render('index.ejs', {
 			newLinks: linksToReturn ,
 	      	colors : [
+	      		"",
 	      		"list-group-item-success",
 				"list-group-item-info",
 				"list-group-item-warning",

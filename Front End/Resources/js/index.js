@@ -1,5 +1,4 @@
-var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber;
-
+var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-';
 var Template = [
     // 0 h3 Name
     {
@@ -11,7 +10,7 @@ var Template = [
     {
         "tag": "h4",
         "id": "Sem",
-        "style": "color:#999; animation: fadeIn 7s; text-align: left; margin-left: 5px"
+        "style": "color:#999; animation: fadeIn 3s; text-align: left; margin-left: 5px"
     },
     // 2 div-table
     {
@@ -22,13 +21,13 @@ var Template = [
     {
         "tag": "table",
         "class": "table",
-        "style": "color: #fff; animation: fadeIn 6s"
+        "style": "color: #fff; animation: fadeIn 3s"
     },
     // 4 div resultFooter
     {
         "tag": "div",
         "id": "resultFooter",
-        "style": "animation: fadeIn 7s;"
+        "style": "animation: fadeIn 4s;"
     },
     // 5 h4 Total
     {
@@ -55,13 +54,33 @@ var Template = [
     // 9 div rankContainer
     {
         "tag": "div",
-        "style": "text-align: center; animation: fadeIn 4s"
+        "style": "text-align: center; animation: fadeIn 3s"
     },
     // 10 button
     {
         "tag": "button",
         "class": "btn btn-success",
         "style": "z-index: -1; margin: 5px; left: 0"
+    },
+    // 11 button dropdown
+    {
+        "tag": "button",
+        "class": "btn btn-secondary dropdown-toggle",
+        "type": "button",
+        "data-toggle": "dropdown",
+        "aria-haspopup": "true",
+        "aria-expanded": "false"
+    },
+    // 12 menu container
+    {
+        "tag": "div",
+        "class": "dropdown-menu dropdown-menu-center"
+    },
+    // 13 button dropdown item
+    {
+        "tag": "button", 
+        "class": "dropdown-item",
+        "type": "button"
     }
 ];
 
@@ -113,6 +132,55 @@ function addProgressBar() {
     }
     display.innerHTML = "";
     display.appendChild(progressBar);
+}
+
+function addDropDownMenu(list) {
+    var dropContainer = document.createElement('div');
+    dropContainer.setAttribute("class", "btn-group");
+    dropContainer.style.animation = "fadeIn 3s";
+    var dropButton = document.createElement(Template[11].tag);
+    setHtml(11, dropButton);
+    dropButton.innerHTML = "Semester";
+    dropContainer.appendChild(dropButton);
+    var menu = document.createElement(Template[12].tag);
+    setHtml(12, menu);
+    var re = false, semNumbers = [];
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].Score === '-') {
+            re = true;
+            continue;
+        }
+        semNumbers[parseInt(list[i].Semester)] = true;
+    }
+    for (let i = 1; i < 9; i++) {
+        if (semNumbers[i]) {
+            latestResult = i;
+            let menuItem = document.createElement(Template[13].tag);
+            setHtml(13, menuItem);
+            menuItem.innerHTML = "Sem 0" + i;
+            menuItem.onclick = dropMenuAction.bind(null, i);
+            menu.appendChild(menuItem);
+        }
+    }
+    if (re) {
+        let menuItem = document.createElement(Template[13].tag);
+        setHtml(13, menuItem);
+        menuItem.innerHTML = "Reappear";
+        menuItem.onclick = dropMenuAction.bind(null, '-');
+        menu.appendChild(menuItem);
+    }
+    dropContainer.appendChild(menu);
+    display.appendChild(dropContainer);
+}
+
+var currentActive;
+function dropMenuAction(sem) {
+    if (currentActive && currentActive !== div) {
+        currentActive.style.display = 'none';
+    }
+    var div = document.getElementById('sem' + sem);
+    div.style.display = '';
+    currentActive = div;
 }
 
 function addRankProgressBar(parent) {
@@ -189,6 +257,11 @@ function rankTransferComplete(Sem, rankRequest) {
         tableContainer.appendChild(table);
         node.style.background = "#343f41";
         node.appendChild(tableContainer);
+        // Class Average
+        var total = document.createElement(Template[5].tag);
+        setHtml(5, total);
+        total.innerHTML = "Class Average: " + (res.Aggregate / res.Students.length).toFixed(2);
+        node.appendChild(total);
     } catch (e) {
         console.log(e);
         var msg = document.createElement(Template[0].tag);
@@ -222,7 +295,6 @@ function rankTransferFailed(Sem) {
 function addNameAndTables() {
     try {
         var student = JSON.parse(request.response);
-        currentRollNumber = student[0].EnrollmentNumber;
         if (student.length === 0) {
             var msg = document.createElement(Template[0].tag);
             setHtml(0, msg);
@@ -230,19 +302,40 @@ function addNameAndTables() {
             display.appendChild(msg);
             return;
         }
+        currentRollNumber = student[0].EnrollmentNumber;
         // Name
         var name = document.createElement(Template[0].tag);
         setHtml(0, name);
         name.innerHTML = student[0].Name;
         display.appendChild(name);
         var tableEntries = ['Name', 'Internal', 'External', 'Total'];
+        // Insert Dropdown
+        var reContainer;
+        addDropDownMenu(student);
         // Table
         for (let i = 0; i < student.length; i++) {
+            // Container
+            var div, id;
+            if (student[i].Score !== '-') {
+                div = document.createElement('div');
+                id = 'sem' + parseInt(student[i].Semester);
+            } else if (!reContainer) {
+                reContainer = document.createElement('div');
+                div = reContainer;
+                id = 'sem-';
+            } else {
+                let nextDiv = document.createElement('div');
+                reContainer.appendChild(nextDiv);
+                div = nextDiv;
+                id = 'sem-';
+            }
+            div.setAttribute("id", id);
+            div.style.display = "none";
             // Sem
             var sem = document.createElement(Template[1].tag);
             setHtml(1, sem);
             sem.innerHTML = 'Sem ' + student[i].Semester;
-            display.appendChild(sem);
+            div.appendChild(sem);
             // Table
             var tableContainer = document.createElement(Template[2].tag);
             setHtml(2, tableContainer);
@@ -269,7 +362,7 @@ function addNameAndTables() {
             table.appendChild(tbody);
             // Add table to display
             tableContainer.appendChild(table);
-            display.appendChild(tableContainer);
+            div.appendChild(tableContainer);
             // If regular, add footer
             if (student[i].Score !== '-') {
                 var footer = document.createElement(Template[4].tag);
@@ -281,7 +374,7 @@ function addNameAndTables() {
                 var hr = document.createElement(Template[6].tag);
                 setHtml(6, hr);
                 footer.appendChild(hr);
-                display.appendChild(footer);
+                div.appendChild(footer);
                 // Insert rank container
                 rankContainers[student[i].Semester] = document.createElement(Template[9].tag);
                 rankData[student[i].Semester] = getRankData(i);
@@ -291,12 +384,15 @@ function addNameAndTables() {
                 button.innerHTML = "Class List";
                 button.setAttribute("onclick", (function(Sem){return "getList("+Sem+")";})(student[i].Semester));
                 rankContainers[student[i].Semester].appendChild(button);
-                display.appendChild(rankContainers[student[i].Semester]);
+                div.appendChild(rankContainers[student[i].Semester]);
             }
-            display.appendChild(document.createElement("br"));
-            display.appendChild(document.createElement("br"));
+            div.appendChild(document.createElement("br"));
+            div.appendChild(document.createElement("br"));
+            display.appendChild(div);
         }
+        dropMenuAction(latestResult);
     } catch (e) {
+        console.log(e);
         var msg = document.createElement(Template[0].tag);
         setHtml(0, msg);
         msg.innerHTML = "An error occured.";

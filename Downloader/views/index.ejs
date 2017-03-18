@@ -9,12 +9,12 @@
         <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
     </head>
     <body style="background-color: #282f31">
-    	<h1 style="color:#ccc; font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy; text-decoration: underline;">
-            Updated Links:
+    	<h1 style="color:#ccc; font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
+            CSE and ECE Results:
         </h1>
     	<div class="list-group">
     	  	<% newLinks.forEach(function (newLink) { %>
-    	  		<a href=<%= newLink.link %> class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 4)] %>" download=<%= newLink.name %> ><%= newLink.name %></a> 
+    	  		<a href=<%= newLink.link %> class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 5)] %>" download=<%= newLink.name %> ><%= newLink.name %></a> 
     	  	<% }); %>
     	</div>
     </body>
