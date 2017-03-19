@@ -23,14 +23,17 @@ router.get('/', function (req, res) {
 				newLinks.push(obj);
 			}
         }
-       	linksToReturn = newLinks.filter(obj => {
+       	var others = [], specific = [];
+       	newLinks.forEach(obj => {
        		if (/ece/gi.test(obj.name) || /cse/gi.test(obj.name)) {
-       			return true;
+       			specific.push(obj);
+       			return;
        		}
-       		return false;
+       		others.push(obj);
        	});
 		res.render('index.ejs', {
-			newLinks: linksToReturn ,
+			specific,
+			others,
 	      	colors : [
 	      		"",
 	      		"list-group-item-success",

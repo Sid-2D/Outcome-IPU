@@ -9,13 +9,29 @@
         <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
     </head>
     <body style="background-color: #282f31">
-    	<h1 style="color:#ccc; font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
+    	<h3 style="color:#ccc; font-size: 40px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
             CSE and ECE Results:
-        </h1>
+        </h3>
     	<div class="list-group">
-    	  	<% newLinks.forEach(function (newLink) { %>
+            <% if (specific.length === 0) { %>
+                <a href='#' class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 5)] %>">No new results found.</a> 
+            <% } %>
+    	  	<% specific.forEach(function (newLink) { %>
     	  		<a href=<%= newLink.link %> class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 5)] %>" download=<%= newLink.name %> ><%= newLink.name %></a> 
     	  	<% }); %>
     	</div>
+        <br>
+        <br>
+        <h3 style="color:#ccc; font-size: 40px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
+            Other Results:
+        </h3>
+        <div class="list-group">
+            <% if (others.length === 0) { %>
+                <a href='#' class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 5)] %>">No new results found.</a> 
+            <% } %>
+            <% others.forEach(function (newLink) { %>
+                <a href=<%= newLink.link %> class="list-group-item list-group-item-action <%= colors[parseInt(Math.random() * 5)] %>" download=<%= newLink.name %> ><%= newLink.name %></a> 
+            <% }); %>
+        </div>
     </body>
 </html>
