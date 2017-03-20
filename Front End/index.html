@@ -142,6 +142,7 @@
             function addProgressBar() {
                 var progressLines = [];
                 progressBar = document.createElement(Template[7].tag);
+                document.getElementById('Search').onclick = "";
                 setHtml(7, progressBar);
                 for (let i = 0; i < 3; i++) {
                     progressLines.push(document.createElement(Template[8].tag));
@@ -216,6 +217,7 @@
             function removeProgressBar() {
                 progressBar.style.animation = "fadeOut 1s";
                 progressBar.style.opacity = 0;
+                document.getElementById('Search').onclick = findResult;
             }
 
             function getList(Sem) {
@@ -525,7 +527,7 @@
                         <div class="input-group">
                           <input id="rollNumber" type="text" class="form-control" size="100" placeholder="IPU Roll Number" required>
                           <div class="input-group-btn">
-                            <button type="submit" class="btn btn-danger" onclick="findResult()"> Search </button>
+                            <button id="Search" type="submit" class="btn btn-danger" onclick="findResult()"> Search </button>
                           </div>
                         </div>
                     </form>
