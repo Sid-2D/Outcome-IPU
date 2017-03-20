@@ -2,19 +2,21 @@ var app = require('express')(),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser'),
 	path = require('path'),
-	downloader = require('../Downloader/app.js');
+	downloader = require('../Downloader/app.js'),
+	sanitize = require('mongo-sanitize'),
+	url = require('url');
+	
+app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+	console.log(`Connected client IP -> ${req.connection.remoteAddress}, port -> ${req.connection.remotePort}`);
+	console.log(`${req.method} ${url.parse(req.url).path}`);
+	next();
+});
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.json());
-
 app.set('views', path.join(__dirname, '/../Downloader/views'));
-
-app.use(function(req, res, next) {
-	res.header("Allow-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-});
 
 app.use('/download', downloader);
 
@@ -27,7 +29,8 @@ app.get('/:roll', function (req, res) {
 		if (err) {
 			return res.send(err);			
 		}
-		db.collection('Student').find({'EnrollmentNumber': req.params['roll']}).toArray(function (err, docs) {
+		var clean = sanitize(req.params['roll']);
+		db.collection('Student').find({'EnrollmentNumber': clean}).toArray(function (err, docs) {
 			if (err) {
 				db.close();
 				return res.send(err);
@@ -43,7 +46,8 @@ app.post('/rank', function (req, res) {
 		if (err) {
 			return res.send(err);
 		}
-		db.collection('Analyze').findOne({_id: req.body}, function (err, doc) {
+		var clean = sanitize(req.body);
+		db.collection('Analyze').findOne({_id: clean}, function (err, doc) {
 			if (err) {
 				db.close();
 				return res.send(err);				
