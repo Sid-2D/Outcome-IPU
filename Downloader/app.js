@@ -8,13 +8,10 @@ router.get('/', function (req, res) {
 		if (err) {
 			return res.send(err);
 		}
+		
 		var $ = cheerio.load(html);
         var trowsOnPage = $("tr").toArray();
         var newLinks = [];
-		var obj = {
-			'link': '',
-			'name': ''
-		};
         for (let i = 1; i < trowsOnPage.length; i++) {
         	try {
 				if (trowsOnPage[i].children[3].name !== "td") {
@@ -24,20 +21,21 @@ router.get('/', function (req, res) {
 					break;
 				}
 				var a = trowsOnPage[i].children[1].children[1];
-				obj.link =  'http://164.100.158.135/ExamResults/' + a.attribs['href'];
+				var obj = {};
+				obj.link = 'http://164.100.158.135/ExamResults/' + a.attribs['href'];
 				obj.name = a.children[0].data;
 				newLinks.push(obj);
-        	} catch (e) { 
+        	} catch (e) {
         		console.log(i, e);
         	}
         }
        	var others = [], specific = [];
-       	newLinks.forEach(obj => {
-       		if (/ece/gi.test(obj.name) || /cse/gi.test(obj.name)) {
-       			specific.push(obj);
+       	newLinks.forEach(link => {
+       		if (/ece/gi.test(link.name) || /cse/gi.test(link.name)) {
+       			specific.push(link);
        			return;
        		}
-       		others.push(obj);
+       		others.push(link);
        	});
 		res.render('index.ejs', {
 			specific,
