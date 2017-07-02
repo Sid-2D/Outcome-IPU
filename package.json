@@ -6,16 +6,22 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "cheerio": "^0.22.0",
+    "css-loader": "^0.28.4",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "mongo-sanitize": "^1.0.0",
     "mongodb": "^2.2.24",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node \"Back End/server.js\""
+    "start": "node \"Back End/server.js\"",
+    "build-frontend": "cd Front\\ End && webpack"
   },
   "author": "Sid",
   "license": "ISC"
