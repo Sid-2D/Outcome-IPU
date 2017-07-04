@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
 	entry: './Resources/webpack.entry.js',
@@ -20,6 +21,11 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: true })
+		new webpack.optimize.UglifyJsPlugin(),
+		new HtmlWebpackPlugin({ 
+			filename: 'index_bundle1.html',
+			template: 'index_bundle.html',
+			inject: 'head'
+		})
 	]
 }
