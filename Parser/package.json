@@ -1,0 +1,18 @@
+{
+  "name": "result-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Result-Parser.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "marks": "node HelperScripts/setMarks.js",
+    "ranks": "node HelperScripts/setRanks.js",
+    "start": "node Result-Parser.js",
+    "upload": "node Upload/parseAndUpload.js"
+  },
+  "author": "Sid",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.9"
+  }
+}
