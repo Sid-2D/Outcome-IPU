@@ -1,30 +1,42 @@
 var len = 0, final = [];
+var previousList = [];
 
-module.exports = function (subjects, db, cb) {
-	subjects.forEach((subject, index) => {
-		var obj = subjectBlueprint();
-		subject = subject.split(' ');
-		subject.shift();	// Get rid of the S.No.
-		obj['_id'] = subject.shift();
-		obj['PaperCode'] = subject.shift();
-		obj['PassMarks'] = subject.pop();
-		obj['MaxMarks'] = subject.pop();
-		obj['Major'] = subject.pop();
-		obj['Minor'] = subject.pop();
-		obj['Kind'] = subject.pop();
-		obj['Mode'] = subject.pop();
-		obj['Exam'] = subject.pop();
-		obj['Type'] = subject.pop();
-		obj['Credits'] = subject.pop();
-		obj['Name'] = subject.join(' ');
-		db.collection('Subject').update({'_id': obj['_id']}, {$set: {'Name': obj['Name']}}, {upsert: true}, function (err) {
-			if (!err) {
-				final[len++] = obj;
+module.exports = function (lists, db, cb) {
+	lists.forEach((list, index) => {
+		// Get clean data about the subjects.
+		subjects = list.split('\r\n').filter((ele) => (!(/^(S\.No\.)|(RESULT)/.test(ele)||(/^\f/.test(ele)))));
+		for (var i = 0; i < subjects.length; i++) {
+			if (/^Prepared Date:/.test(subjects[i])) {
+				subjects = subjects.slice(0, i);
+				break;
 			}
-			if (index == subjects.length - 1) {
-				cb(final);
-			}
+		}
+		console.log(subjects);
+		currentList = [];
+		// console.log(subjects)
+		// process.exit()
+		subjects.forEach(function (subject) {
+			var obj = subjectBlueprint();
+			subject = subject.split(' ');
+			subject.shift();	// Get rid of the S.No.
+			obj['_id'] = subject.shift();
+			obj['PaperCode'] = subject.shift();
+			obj['PassMarks'] = subject.pop();
+			obj['MaxMarks'] = subject.pop();
+			obj['Major'] = subject.pop();
+			obj['Minor'] = subject.pop();
+			obj['Kind'] = subject.pop();
+			obj['Mode'] = subject.pop();
+			obj['Exam'] = subject.pop();
+			obj['Type'] = subject.pop();
+			obj['Credits'] = subject.pop();
+			obj['Name'] = subject.join(' ');
+			currentList.push(obj);
 		});
+		final.push(currentList);
+		if (index == lists.length - 1) {
+			cb(final);
+		}
 	});
 }
 
