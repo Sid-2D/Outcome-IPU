@@ -12,7 +12,11 @@ if (files.length === 3) {
 
 files = files.map(function (filename) {
 	var nameWithoutSpaces = filename.replace(/ /g, '-');
-	console.log(child_process.execSync(`mv Upload/${filename} Upload/${nameWithoutSpaces}`).toString());
+	try {
+		console.log(child_process.execSync(`mv Upload/${filename} ${nameWithoutSpaces}`).toString());
+	} catch (err) {
+		// console.log(err);
+	}
 	return nameWithoutSpaces;
 });
 
@@ -23,7 +27,7 @@ files.forEach(function (file, index) {
 			console.log(child_process.execSync(`npm start Upload/${file}`).toString());
 			process.exit()
 			// Process was successful move this file
-			console.log(child_process.execSync(`mv Upload/${file} Upload/Completed/${file}`).toString());
+			console.log(child_process.execSync(`mv Upload/${file} Completed/${file}`).toString());
 		} catch (e) {
 			console.log(`---------------------------------`);
 			console.log(`Error while parsing file: ${file}`);

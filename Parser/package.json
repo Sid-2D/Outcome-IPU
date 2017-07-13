@@ -8,7 +8,8 @@
     "marks": "node HelperScripts/setMarks.js",
     "ranks": "node HelperScripts/setRanks.js",
     "start": "node Result-Parser.js",
-    "upload": "node Upload/parseAndUpload.js"
+    "upload": "node Upload/parseAndUpload.js",
+    "upload-linux": "node Upload/parseAndUploadLinux.js"
   },
   "author": "Sid",
   "license": "ISC",
