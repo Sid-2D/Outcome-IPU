@@ -13,7 +13,7 @@ if (files.length === 3) {
 files = files.map(function (filename) {
 	var nameWithoutSpaces = filename.replace(/ /g, '-');
 	try {
-		console.log(child_process.execSync(`mv Upload/${filename} ${nameWithoutSpaces}`).toString());
+		console.log(child_process.execSync(`mv Upload/${filename} Upload/${nameWithoutSpaces}`).toString());
 	} catch (err) {
 		// console.log(err);
 	}
