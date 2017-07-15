@@ -1,19 +1,18 @@
+var os = require('os');
 var len = 0, final = [];
 var previousList = [];
 
 module.exports = function (lists, db, cb) {
 	lists.forEach((list, index) => {
 		// Get clean data about the subjects.
-		subjects = list.split('\r\n').filter((ele) => (!(/^(S\.No\.)|(RESULT)/.test(ele)||(/^\f/.test(ele)))));
+		subjects = list.split(os.EOL).filter((ele) => (!(/^(S\.No\.)|(RESULT)/.test(ele)||(/^\f/.test(ele)))));
 		for (var i = 0; i < subjects.length; i++) {
 			if (/^Prepared Date:/.test(subjects[i])) {
 				subjects = subjects.slice(0, i);
 				break;
 			}
 		}
-		console.log(subjects);
 		currentList = [];
-		// console.log(subjects)
 		// process.exit()
 		subjects.forEach(function (subject) {
 			var obj = subjectBlueprint();
