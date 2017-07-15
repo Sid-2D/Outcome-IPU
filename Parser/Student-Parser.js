@@ -7,6 +7,8 @@ var previousResult = {};
 module.exports = function (data, subjectArray, db, cb) {
 	var regexForStudentsLinux = /\n\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\n\w\w?\n/g;
 	var regexForStudentsWindows = /\n\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\r\n\w\w?\r/g;
+	// console.log(data)
+	// process.exit()
 	var regexForStudents;
 	if (os.platform() === 'linux') {
 		regexForStudents = regexForStudentsLinux;
@@ -25,7 +27,7 @@ module.exports = function (data, subjectArray, db, cb) {
 				// 	return;
 				// }				
 			} else {
-				return;
+				return;	
 			}
 			// Institution = students.match(/Institution: ([^]*?)\r/)[1];
 			Institution = students.match(new RegExp('Institution: ([^]*?)' + os.EOL))[1];
@@ -35,7 +37,17 @@ module.exports = function (data, subjectArray, db, cb) {
 			if (matchSubjectList()) {
 				currentSubjects = subjectArray.shift();
 			}
+			if (os.platform() === 'linux') {
+				// studentList.shift();
+				// studentList.pop();
+			}
 			studentList.forEach((student) => {
+				if (os.platform() === 'linux') {
+					student.shift();
+					student.pop();
+				}
+				console.log(student)
+				// process.exit()
 				var obj = studentBlueprint();
 				obj.EnrollmentNumber = student.shift().substr(1);
 				obj.Name = student.shift();
