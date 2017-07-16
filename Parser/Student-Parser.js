@@ -5,7 +5,7 @@ var currentSubjects = [];	// Stores the names and subject codes for current set 
 var previousResult = {};
 
 module.exports = function (data, subjectArray, db, cb) {
-	var regexForStudentsLinux = /\n\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\n\w\w?\n/g;
+	var regexForStudentsLinux = /\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\n\w\w?\n/g;
 	var regexForStudentsWindows = /\n\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\r\n\w\w?\r/g;
 	// console.log(data)
 	// process.exit()
@@ -16,9 +16,11 @@ module.exports = function (data, subjectArray, db, cb) {
 		regexForStudents = regexForStudentsWindows;
 	}
 	data.forEach((students) => {
+		// console.log(students)
 		var studentList = students.match(regexForStudents);
 		if (studentList) {
 			studentList = studentList.map((ele) => (ele.split(os.EOL)));
+			// console.log(studentList)
 			Sem = students.match(/Sem\.\/Year: (\d+)/)[1];
 			Name = students.match(/Programme Name: ([^]*?) Sem/)[1];
 			if (students.match(/Batch: ([^]*?) Exa/)) {
@@ -37,19 +39,18 @@ module.exports = function (data, subjectArray, db, cb) {
 			if (matchSubjectList()) {
 				currentSubjects = subjectArray.shift();
 			}
-			if (os.platform() === 'linux') {
-				// studentList.shift();
-				// studentList.pop();
-			}
 			studentList.forEach((student) => {
+				console.log(student)
 				if (os.platform() === 'linux') {
-					student.shift();
+					// student.shift();
 					student.pop();
 				}
-				console.log(student)
-				// process.exit()
 				var obj = studentBlueprint();
-				obj.EnrollmentNumber = student.shift().substr(1);
+				if (os.platform() === 'linux') {
+					obj.EnrollmentNumber = student.shift();
+				} else {
+					obj.EnrollmentNumber = student.shift().substr(1);
+				}
 				obj.Name = student.shift();
 				obj.CreditsSecured = student.pop().match(/(\w+)/);
 				try {
@@ -68,7 +69,11 @@ module.exports = function (data, subjectArray, db, cb) {
 					try {
 						marks.Credits = id.match(/\((\w+)\)/)[1];
 					} catch (e) {  }
-					marksValue = student.shift().split(' ');
+					if (student.length) {
+						marksValue = student.shift().split(' ');
+					} else {
+						return;
+					}
 					marks.Internal = marksValue[0];
 					marks.External = marksValue[1];
 					var total = student.shift();
@@ -135,9 +140,9 @@ var matchSubjectList = function () {
 }
 
 var getNameFromCurrentList = function (id) {
-	console.log('Required', id)
+	// console.log('Required', id)
 	for (var i = 0; i < currentSubjects.length; i++) {
-		console.log('Current', currentSubjects[i]['_id'])
+		// console.log('Current', currentSubjects[i]['_id'])
 		if (currentSubjects[i]['_id'] === id) {
 			return currentSubjects[i]['Name'];
 		}
