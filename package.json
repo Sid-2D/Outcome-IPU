@@ -14,11 +14,13 @@
     "express": "^4.15.2",
     "mongo-sanitize": "^1.0.0",
     "mongodb": "^2.2.24",
+    "optimize-css-assets-webpack-plugin": "^2.0.0",
     "request": "^2.81.0",
     "style-loader": "^0.18.2",
-    "webpack": "^3.0.0"
+    "webpack": "^3.1.0"
   },
   "devDependencies": {
+    "extract-text-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^2.29.0",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22"
   },
