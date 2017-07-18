@@ -22,12 +22,14 @@
   "devDependencies": {
     "extract-text-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^2.29.0",
-    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22"
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
+    "webpack-dev-server": "^2.5.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node \"Back End/server.js\"",
-    "build-frontend": "cd Front\\ End && webpack"
+    "webpack": "cd Front\\ End && webpack",
+    "dev": "cd Front\\ End && webpack-dev-server --content-base ./dist"
   },
   "author": "Sid",
   "license": "ISC"
