@@ -26,10 +26,6 @@ module.exports = {
 		new ExtractTextPlugin('bundle.css'),
 		// new OptimizeCSSAssetsPlugin(),
 		new webpack.optimize.UglifyJsPlugin()
-		// new HtmlWebpackPlugin({ 
-		// 	filename: 'index.html',
-		// 	template: 'index_template.html',
-		// 	inject: 'head'
-		// })
-	]
+	],
+	watch: true
 }
