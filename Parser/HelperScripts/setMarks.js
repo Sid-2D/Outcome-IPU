@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 
-MongoClient.connect(process.env.MLAB, function (err, db) {
+MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/Result', function (err, db) {
 	if (err) {
 		console.log("Crashed at init:");
 		console.log(err);
