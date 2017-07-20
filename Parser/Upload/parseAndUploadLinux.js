@@ -21,13 +21,12 @@ files = files.map(function (filename) {
 });
 
 files.forEach(function (file, index) {
-	if (file !== 'parseAndUpload.js' && file !== 'Completed' && file !== 'npm-debug.log') {
+	if (file !== 'parseAndUpload.js' && file !== 'Completed' && file !== 'parseAndUploadLinux.js') {
 		console.log(`Parsing file: ${file}`);
 		try {
 			console.log(child_process.execSync(`npm start Upload/${file}`).toString());
-			process.exit()
 			// Process was successful move this file
-			console.log(child_process.execSync(`mv Upload/${file} Completed/${file}`).toString());
+			// console.log(child_process.execSync(`mv Upload/${file} Upload/Completed/${file}`).toString());
 		} catch (e) {
 			console.log(`---------------------------------`);
 			console.log(`Error while parsing file: ${file}`);
@@ -39,8 +38,8 @@ files.forEach(function (file, index) {
 	}
 	// All files parsed, fix marks and ranks
 	if (index == files.length - 1) {
-		console.log(`Fixing subject names:`);
-		console.log(child_process.execSync(`npm run marks`).toString());
+		console.log(`Adding aggregates:`);
+		console.log(child_process.execSync(`npm run aggregate`).toString());
 		console.log(`Adding class ranks:`);
 		console.log(child_process.execSync(`npm run ranks`).toString());
 	}
