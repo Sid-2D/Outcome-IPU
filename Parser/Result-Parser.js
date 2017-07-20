@@ -3,7 +3,7 @@ var fs = require('fs'),
 	subjectParser = require('./Subject-Parser'),
 	MongoClient = require('mongodb').MongoClient,
 	studentParser = require('./Student-Parser'),
-	fileName = process.argv[2].match(/Upload\\(.+?).pdf/)[1];
+	fileName = process.argv[2].match(/Upload\/(.+?).pdf/)[1];
 
 child_process.execSync(`pdftotext -raw Upload/${fileName}.pdf TXT/${fileName}.txt`);
 
@@ -16,11 +16,9 @@ var students = pdf.match(regexForStudents);
 var subjects = pdf.match(regexForSubjects);
 
 fs.writeFileSync('subjectsData.json', JSON.stringify(subjects, null, 2));
-fs.writeFileSync('studentsData.json', JSON.stringify(subjects, null, 2));
+fs.writeFileSync('studentsData.json', JSON.stringify(students, null, 2));
 
-process.env.LOCAL = 'mongodb://localhost/Result';
-
-MongoClient.connect(process.env.LOCAL, function (err, db) {
+MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost/Result', function (err, db) {
 	// Properly parse subjects and store them in MongoDB.
 	if (err) {
 		console.log("Crashed while connecting to db");

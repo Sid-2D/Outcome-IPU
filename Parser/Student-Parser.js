@@ -92,11 +92,11 @@ module.exports = function (data, subjectArray, db, cb) {
 				if (!present) {
 					return;
 				}
-				// db.collection('Student').insert(obj, function (err) {
-				// 	if (err) {
-				// 		console.error(err);
-				// 	}
-				// });
+				db.collection('Student').insert(obj, function (err) {
+					if (err) {
+						console.error(err);
+					}
+				});
 				final[len++] = obj;
 			});
 		}	
@@ -111,7 +111,7 @@ var studentBlueprint = function () {
 		'Batch': Batch,
 		'Examination': Examination,
 		'Institution': Institution,
-		'Institution Code': InstitutionCode,
+		'CollegeCode': InstitutionCode,
 		'EnrollmentNumber': null,
 		'Name': null,
 		'Marks': [],
