@@ -1,88 +1,7 @@
-var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-';
-var Template = [
-    // 0 h3 Name
-    {
-        "tag": "h3",
-        "id": "Name",
-        "style": "color: #999; animation: fadeIn 4s"
-    },
-    // 1 h4 Sem
-    {
-        "tag": "h4",
-        "id": "Sem",
-        "style": "color:#999; animation: fadeIn 3s; text-align: left; margin-left: 5px"
-    },
-    // 2 div-table
-    {
-        "tag": "div",
-        "class": "table-responsive"
-    },
-    // 3 table
-    {
-        "tag": "table",
-        "class": "table",
-        "style": "color: #fff; animation: fadeIn 3s"
-    },
-    // 4 div resultFooter
-    {
-        "tag": "div",
-        "id": "resultFooter",
-        "style": "animation: fadeIn 4s;"
-    },
-    // 5 h4 Total
-    {
-        "tag": "h4",
-        "id": "Total",
-        "style": "color:#999; text-align: left; margin-left: 5px"
-    },
-    // 6 hr
-    {
-        "tag": "hr",
-        "style": "margin: 0px; background-color: #999; width: 100%;"
-    },
-    // 7 div progress container
-    {
-        "tag": "div",
-        "class": "load-3",
-        "style": "margin: 7px; margin-bottom: 0px; animation: fadeIn 1s; z-index: -1;"
-    },
-    // 8 div progress lines
-    {
-        "tag": "div",
-        "class": "line"
-    },
-    // 9 div rankContainer
-    {
-        "tag": "div",
-        "style": "text-align: center; animation: fadeIn 3s"
-    },
-    // 10 button
-    {
-        "tag": "button",
-        "class": "btn btn-success",
-        "style": "z-index: -1; margin: 5px; left: 0"
-    },
-    // 11 button dropdown
-    {
-        "tag": "button",
-        "class": "btn btn-secondary dropdown-toggle",
-        "type": "button",
-        "data-toggle": "dropdown",
-        "aria-haspopup": "true",
-        "aria-expanded": "false"
-    },
-    // 12 menu container
-    {
-        "tag": "div",
-        "class": "dropdown-menu dropdown-menu-center"
-    },
-    // 13 button dropdown item
-    {
-        "tag": "button", 
-        "class": "dropdown-item",
-        "type": "button"
-    }
-];
+var Template = require('./template.js');
+var makeCompTable = require('./compTable.js');
+
+var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-', currentSem, marksList = [];
 
 window.onload = function() {
     display = document.getElementById("Display");
@@ -91,21 +10,7 @@ window.onload = function() {
     request.addEventListener("error", resultTransferFailed);
 }
 
-function resultTransferComplete() {
-    removeProgressBar(); 
-    addNameAndTables();
-}
-
-function resultTransferFailed() {
-    removeProgressBar();
-    var msg = document.createElement(Template[0].tag);
-    setHtml(0, msg);
-    console.log(request.response);
-    msg.innerHTML = "An error occured.";
-    display.appendChild(msg);
-}
-
-function findResult() {
+window.findResult = function() {
     // Initiate request and add progress bar
     var roll = document.getElementById('rollNumber').value;
     addProgressBar();
@@ -119,6 +24,20 @@ function findResult() {
         msg.innerHTML = "Please enter valid roll number.";
         display.appendChild(msg);
     }
+}
+
+function resultTransferComplete() {
+    removeProgressBar();
+    addNameAndTables();
+}
+
+function resultTransferFailed() {
+    removeProgressBar();
+    var msg = document.createElement(Template[0].tag);
+    setHtml(0, msg);
+    console.log(request.response);
+    msg.innerHTML = "An error occured.";
+    display.appendChild(msg);
 }
 
 function addProgressBar() {
@@ -150,6 +69,8 @@ function addDropDownMenu(list) {
             re = true;
             continue;
         }
+        marksList[parseInt(list[i].Semester)] = Object.assign([], list[i].Marks);
+        marksList[parseInt(list[i].Semester)].push(list[i].Score);
         semNumbers[parseInt(list[i].Semester)] = true;
     }
     for (let i = 1; i < 9; i++) {
@@ -178,6 +99,7 @@ function dropMenuAction(sem) {
     if (currentActive && currentActive !== div) {
         currentActive.style.display = 'none';
     }
+    currentSem = sem;
     var div = document.getElementById('sem' + sem);
     div.style.display = '';
     currentActive = div;
@@ -200,7 +122,7 @@ function removeProgressBar() {
     progressBar.style.opacity = 0;
 }
 
-function getList(Sem) {
+window.getList = function(Sem) {
     Sem = '0' + Sem;
     rankContainers[Sem].childNodes[0].style.animation = "fadeOut 1s";
     rankContainers[Sem].childNodes[0].style.opacity = 0;
@@ -238,19 +160,39 @@ function rankTransferComplete(Sem, rankRequest) {
         // Start populating table
         for (let j = 0; j < res.Students.length; j++) {
             tr = document.createElement('tr');
+            tr.setAttribute('data-toggle', 'collapse');
+            tr.setAttribute('class', 'accordion-toggle');
+            tr.setAttribute('data-target', '#comp' + parseInt(j + 1));
             if (res.Students[j].EnrollmentNumber === currentRollNumber) {
                 tr.style.background = "#999";
+                tr.setAttribute('data-target', '');
             }
             var th = document.createElement('th');
             th.setAttribute('scope', 'row');
             th.innerHTML = j + 1;
             tr.appendChild(th);
+            var td = document.createElement('td');
+            var iTag = document.createElement(Template[14].tag);
+            iTag.setAttribute('id', 'compBtn' + parseInt(j + 1));
+            setHtml(14, iTag);
+            // Change fa class on click
+            td.appendChild(iTag);
+            tr.appendChild(td);
             for (let k = 0; k < 3; k++) {
                 var td = document.createElement('td');
                 td.innerHTML = res.Students[j][tableEntries[k]];
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
+            var trComp = document.createElement('tr');
+            var tdComp = document.createElement('td');
+            setHtml(15, tdComp);
+            var divComp = document.createElement('div')
+            setHtml(16, divComp);
+            divComp.setAttribute('id', 'comp' + parseInt(j + 1));
+            tdComp.appendChild(divComp);
+            trComp.appendChild(tdComp);
+            tbody.appendChild(trComp);
         }
         table.appendChild(tbody);
         // Add table to current node
@@ -262,6 +204,11 @@ function rankTransferComplete(Sem, rankRequest) {
         setHtml(5, total);
         total.innerHTML = "Class Average: " + (res.Aggregate / res.Students.length).toFixed(2);
         node.appendChild(total);
+        // Add Event listeners on row collapse
+        for (var comp = 1; comp <= res.Students.length; comp++) {
+            window.jQuery(`#comp${comp}`).on('hide.bs.collapse', compEventListener.bind(null, 'hide', res.Students[comp - 1].EnrollmentNumber, comp));
+            window.jQuery(`#comp${comp}`).on('show.bs.collapse', compEventListener.bind(null, 'show', res.Students[comp - 1].EnrollmentNumber, comp));
+        }
     } catch (e) {
         console.log(e);
         var msg = document.createElement(Template[0].tag);
@@ -270,8 +217,8 @@ function rankTransferComplete(Sem, rankRequest) {
         node.appendChild(msg);
     }
     function setHeaders() {
-        var headers = ["#", "Name", "Roll Number", "Aggregate"];
-        for (let i = 0; i < 4; i++) {
+        var headers = ["#", 'Compare', "Name", "Roll Number", "Aggregate"];
+        for (let i = 0; i < headers.length; i++) {
             var th = document.createElement("th");
             th.innerHTML = headers[i];
             tr.appendChild(th);
@@ -426,4 +373,58 @@ function setHtml(i, tag) {
             tag.setAttribute(key, Template[i][key]);
         }
     });
+}
+
+function compEventListener(type, enrollmentNumber,  tagNum) {
+    var tag = document.getElementById("compBtn" + tagNum);
+    if (type === 'show') {
+        tag.setAttribute("class", "fa fa-minus-square");
+        processComparison(tagNum, enrollmentNumber);
+    } else {
+        tag.setAttribute("class", "fa fa-plus-square");
+    } 
+}
+
+function processComparison(tagNum, enrollmentNumber) {
+    var div = document.getElementById('comp' + tagNum);
+    if (div.childNodes.length === 0) {
+        // add progress bar
+        addCompProgressBar(div);
+        // fetch result
+        createCompRequest(tagNum, enrollmentNumber);
+    }
+}
+
+function createCompRequest(tagNum, enrollmentNumber) {
+    var request = new XMLHttpRequest();
+    request.addEventListener("load", compTransferSuccess.bind(null, tagNum));
+    request.addEventListener("error", compTransferFailed.bind(null, tagNum));
+    request.open('GET', '/' + enrollmentNumber, true);
+    request.send();
+    function compTransferSuccess(tagNum) {
+        // remove progress bar
+        var compDiv = document.getElementById(`comp${tagNum}`); 
+        var faCog = compDiv.childNodes[0];
+        faCog.style.animation = 'fadeOut 1s';
+        faCog.style.opacity = 0;        
+
+        // Create table here
+        var compTable = makeCompTable(request.response, currentSem, marksList[currentSem]);
+        compTable.setAttribute("style", "animation: fadeIn 2s");
+        // ---------------------------------------------
+
+        setTimeout(function() {
+            compDiv.insertBefore(compTable, faCog);
+            compDiv.removeChild(faCog);
+        }, 1000);
+    }
+    function compTransferFailed(tagNum) {
+        // Implement comp fall
+    }
+}
+
+function addCompProgressBar(div) {
+    var iTag = document.createElement(Template[17].tag);
+    setHtml(17, iTag);
+    div.appendChild(iTag);
 }
