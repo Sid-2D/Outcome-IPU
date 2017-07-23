@@ -162,7 +162,7 @@ function rankTransferComplete(Sem, rankRequest) {
             tr = document.createElement('tr');
             tr.setAttribute('data-toggle', 'collapse');
             tr.setAttribute('class', 'accordion-toggle');
-            tr.setAttribute('data-target', '#comp' + parseInt(j + 1));
+            tr.setAttribute('data-target', '#comp' + parseInt(j + 1) + 'sem' + currentSem);
             if (res.Students[j].EnrollmentNumber === currentRollNumber) {
                 tr.style.background = "#999";
                 tr.setAttribute('data-target', '');
@@ -189,7 +189,7 @@ function rankTransferComplete(Sem, rankRequest) {
             setHtml(15, tdComp);
             var divComp = document.createElement('div')
             setHtml(16, divComp);
-            divComp.setAttribute('id', 'comp' + parseInt(j + 1));
+            divComp.setAttribute('id', 'comp' + parseInt(j + 1) + 'sem' + currentSem);
             tdComp.appendChild(divComp);
             trComp.appendChild(tdComp);
             tbody.appendChild(trComp);
@@ -206,8 +206,8 @@ function rankTransferComplete(Sem, rankRequest) {
         node.appendChild(total);
         // Add Event listeners on row collapse
         for (var comp = 1; comp <= res.Students.length; comp++) {
-            window.jQuery(`#comp${comp}`).on('hide.bs.collapse', compEventListener.bind(null, 'hide', res.Students[comp - 1].EnrollmentNumber, comp));
-            window.jQuery(`#comp${comp}`).on('show.bs.collapse', compEventListener.bind(null, 'show', res.Students[comp - 1].EnrollmentNumber, comp));
+            window.jQuery(`#comp${comp}sem${currentSem}`).on('hide.bs.collapse', compEventListener.bind(null, 'hide', res.Students[comp - 1].EnrollmentNumber, comp));
+            window.jQuery(`#comp${comp}sem${currentSem}`).on('show.bs.collapse', compEventListener.bind(null, 'show', res.Students[comp - 1].EnrollmentNumber, comp));
         }
     } catch (e) {
         console.log(e);
@@ -318,6 +318,10 @@ function addNameAndTables() {
                 setHtml(5, total);
                 total.innerHTML = "Aggregate: " + student[i].Score;
                 footer.appendChild(total);
+                var cgpa = document.createElement(Template[5].tag);
+                setHtml(5, cgpa);
+                cgpa.innerHTML = "Credit Percentage: " + student[i].Credit;
+                footer.appendChild(cgpa);
                 var hr = document.createElement(Template[6].tag);
                 setHtml(6, hr);
                 footer.appendChild(hr);
@@ -386,7 +390,7 @@ function compEventListener(type, enrollmentNumber,  tagNum) {
 }
 
 function processComparison(tagNum, enrollmentNumber) {
-    var div = document.getElementById('comp' + tagNum);
+    var div = document.getElementById('comp' + tagNum + 'sem' + currentSem);
     if (div.childNodes.length === 0) {
         // add progress bar
         addCompProgressBar(div);
@@ -403,7 +407,7 @@ function createCompRequest(tagNum, enrollmentNumber) {
     request.send();
     function compTransferSuccess(tagNum) {
         // remove progress bar
-        var compDiv = document.getElementById(`comp${tagNum}`); 
+        var compDiv = document.getElementById(`comp${tagNum}sem${currentSem}`); 
         var faCog = compDiv.childNodes[0];
         faCog.style.animation = 'fadeOut 1s';
         faCog.style.opacity = 0;        
