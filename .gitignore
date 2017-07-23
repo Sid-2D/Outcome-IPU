@@ -1,2 +1,8 @@
 node_modules/**
 Parser/node_modules/**
+Parser/FinalLists/Students/*.txt
+Parser/FinalLists/Subjects/*.txt
+Parser/Upload/Completed/*.pdf
+Parser/TXT/*.txt
+package-lock.json
+yarn.lock
