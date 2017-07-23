@@ -33,20 +33,20 @@ function makeCompTable(response, sem, master) {
             td.innerHTML = student.Marks[j][tableEntries[k]];
             td.innerHTML += ' ';
             var diff = parseInt(master[j][tableEntries[k]]) - parseInt(student.Marks[j][tableEntries[k]]);
-            if (!diff) {
+            // Handle absent condition
+            if (!diff && diff !== 0) {
                 diff = parseInt(master[j][tableEntries[k]]);
                 if (!diff) {
                     diff = -1 * parseInt(student.Marks[j][tableEntries[k]]);
                 }
             }
-            // Handle absent condition
             if (diff >= 0) {
                 // insert up chevron
                 var up = document.createElement(Template[19].tag);
                 setHtml(19, up);
                 up.innerHTML = Math.abs(diff);
                 td.appendChild(up);
-            } else {
+            } else if (diff) {
                 // insert down chevron
                 var down = document.createElement(Template[20].tag);
                 setHtml(20, down);
