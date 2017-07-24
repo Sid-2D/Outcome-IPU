@@ -70,6 +70,7 @@ function addDropDownMenu(list) {
             continue;
         }
         marksList[parseInt(list[i].Semester)] = Object.assign([], list[i].Marks);
+        marksList[parseInt(list[i].Semester)].push(list[i].Credit);
         marksList[parseInt(list[i].Semester)].push(list[i].Score);
         semNumbers[parseInt(list[i].Semester)] = true;
     }
@@ -173,7 +174,7 @@ function rankTransferComplete(Sem, rankRequest) {
             tr.appendChild(th);
             var td = document.createElement('td');
             var iTag = document.createElement(Template[14].tag);
-            iTag.setAttribute('id', 'compBtn' + parseInt(j + 1));
+            iTag.setAttribute('id', 'compBtn' + parseInt(j + 1) + 'sem' + currentSem);
             setHtml(14, iTag);
             // Change fa class on click
             td.appendChild(iTag);
@@ -380,7 +381,7 @@ function setHtml(i, tag) {
 }
 
 function compEventListener(type, enrollmentNumber,  tagNum) {
-    var tag = document.getElementById("compBtn" + tagNum);
+    var tag = document.getElementById("compBtn" + tagNum + 'sem' + currentSem);
     if (type === 'show') {
         tag.setAttribute("class", "fa fa-minus-square");
         processComparison(tagNum, enrollmentNumber);
