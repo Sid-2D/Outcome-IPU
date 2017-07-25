@@ -1,4 +1,5 @@
-var app = require('express')(),
+var express = require('express'),
+	app = express(),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser'),
 	path = require('path'),
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 app.use(function (req, res, next) {
 	console.log(`Connected client IP -> ${req.connection.remoteAddress}, port -> ${req.connection.remotePort}`);
 	console.log(`${req.method} ${url.parse(req.url).path}`);
+	console.log(`User-agent: ${req.headers['user-agent']}`);
 	next();
 });
 
@@ -20,17 +22,19 @@ app.set('views', path.join(__dirname, '/../Downloader/views'));
 
 app.use('/download', downloader);
 
-app.get('/', function(req, res) {
-	res.sendFile(path.join(__dirname + '/../Front End/index.html'));
-});
+app.use(express.static(path.join(__dirname, '/../Front End/dist')));
 
 app.get('/:roll', function (req, res) {
-	MongoClient.connect(process.env.MONGO_URL, function (err, db) {
+	var cleanRollNumber = sanitize(req.params['roll']);
+	if (!/^\d{11}$/.test(cleanRollNumber)) {
+		return res.send([]);
+	}
+	var subject = cleanRollNumber.match(/\d{6}(\d{3})\d{2}/)[1];
+	MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/Result', function (err, db) {
 		if (err) {
 			return res.send(err);			
 		}
-		var clean = sanitize(req.params['roll']);
-		db.collection('Student').find({'EnrollmentNumber': clean}).toArray(function (err, docs) {
+		db.collection('Student').find({'EnrollmentNumber': cleanRollNumber}).toArray(function (err, docs) {
 			if (err) {
 				db.close();
 				return res.send(err);
@@ -42,7 +46,7 @@ app.get('/:roll', function (req, res) {
 });
 
 app.post('/rank', function (req, res) {
-	MongoClient.connect(process.env.MONGO_URL, function (err, db) {
+	MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/Result', function (err, db) {
 		if (err) {
 			return res.send(err);
 		}
