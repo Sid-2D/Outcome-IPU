@@ -20,7 +20,7 @@ var Template = [
     {
         "tag": "table",
         "class": "table",
-        "style": "color: #fff; animation: fadeIn 3s"
+        "style": "color: #fff; animation: fadeIn 1s"
     },
     // 4 div resultFooter
     {
@@ -109,7 +109,7 @@ var Template = [
     {
         "tag": "table",
         "class": "table",
-        "style": "color: #fff; animation: fadeIn 3s; background: #333"
+        "style": "color: #fff; animation: fadeIn 1s; background: #333"
     },
     // 19 chevron up
     {
