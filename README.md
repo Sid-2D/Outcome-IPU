@@ -17,5 +17,9 @@ A single page [web app](https://outcome-ipu.herokuapp.com) that provides results
 	- Bootstrap.
 	- Vanilla Javascript.
 
-*The parsers support parsing of any IPU Result of any Course but due to lack of storage provided by the free server, I have currently limited the results to B.Tech CSE and ECE only.  
-*Works best on Chrome and Firefox.  
+
+### Version 1.1
+Now includes comparison tables of students in a class.
+
+* The parsers support parsing of any IPU Result of any Course but due to lack of storage provided by the free server, I have currently limited the results to B.Tech CSE and ECE only.  
+* Works best on Chrome and Firefox.  
