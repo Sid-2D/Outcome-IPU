@@ -1,1 +1,2 @@
-Only one file i.e. `index.html` file is served, all css and js are already included here to prevent multiple requests. 
+Update 1.1:
+  Now serving the entire dist folder with minified js bundle and unaltered CSS and HTML.
