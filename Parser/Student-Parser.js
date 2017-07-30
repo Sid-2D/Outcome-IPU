@@ -58,8 +58,6 @@ module.exports = function (data, subjectArray, db, cb) {
 				} catch (e) {
 					obj.CreditsSecured = '';
 				}
-				// Get rid of unwanted data.
-				student.shift(); student.shift();
 				var present = false;
 				while (student.length) {
 					var marks = marksBlueprint();

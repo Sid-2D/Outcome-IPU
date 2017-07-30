@@ -9,7 +9,7 @@ child_process.execSync(`pdftotext -raw Upload/${fileName}.pdf TXT/${fileName}.tx
 
 var pdf = fs.readFileSync(`TXT/${fileName}.txt`, 'utf8');
 
-var regexForStudents = /Result of Programme Code:([^]*?)\f/g;
+var regexForStudents = /Result of Programme Code:([^0]*?)\f/g;
 var regexForSubjects = /S\.No\. Paper([^]*?)RESULT TAB/g;
 
 var students = pdf.match(regexForStudents);
