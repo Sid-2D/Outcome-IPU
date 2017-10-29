@@ -270,15 +270,19 @@ function addNameAndTables() {
             } else if (!reContainer) {
                 reContainer = document.createElement('div');
                 div = reContainer;
+                div.style.display = "none";
                 id = 'sem-';
+                div.setAttribute("id", id);
             } else {
                 let nextDiv = document.createElement('div');
                 reContainer.appendChild(nextDiv);
                 div = nextDiv;
                 id = 'sem-';
             }
-            div.setAttribute("id", id);
-            div.style.display = "none";
+            if (id !== 'sem-') {
+                div.setAttribute("id", id);
+                div.style.display = "none";
+            }
             // Sem
             var sem = document.createElement(Template[1].tag);
             setHtml(1, sem);
@@ -340,7 +344,12 @@ function addNameAndTables() {
             }
             div.appendChild(document.createElement("br"));
             div.appendChild(document.createElement("br"));
-            display.appendChild(div);
+            if (id !== 'sem-') {
+                display.appendChild(div);
+            }
+        }
+        if (reContainer) {
+            display.appendChild(reContainer);
         }
         dropMenuAction(latestResult);
     } catch (e) {
