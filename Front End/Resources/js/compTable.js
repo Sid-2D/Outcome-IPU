@@ -64,11 +64,12 @@ function makeCompTable(response, sem, master) {
     // Add footer
     var footer = document.createElement(Template[4].tag);
     setHtml(4, footer);
-    var total = document.createElement(Template[5].tag);
-    setHtml(5, total);
-    var difference = Number(master[master.length - 1]) - Number(student.Score); 
+    // Add aggregate with difference
+    var aggregate = document.createElement(Template[5].tag);
+    setHtml(5, aggregate);
+    var differenceAggregate = Number(master[master.length - 1]) - Number(student.Score); 
     var chevron;
-    if (difference >= 0) {
+    if (differenceAggregate >= 0) {
         // Up chevron and limit decimal
         chevron = document.createElement(Template[19].tag);
         setHtml(19, chevron);
@@ -78,10 +79,28 @@ function makeCompTable(response, sem, master) {
         setHtml(20, chevron);
     }
     chevron.style.fontSize = "20px";
-    chevron.innerHTML = Math.abs(difference.toFixed(2));
-    total.innerHTML = "Aggregate: " + student.Score + " ";
-    total.appendChild(chevron);
-    footer.appendChild(total);
+    chevron.innerHTML = Math.abs(differenceAggregate.toFixed(2));
+    aggregate.innerHTML = "Aggregate: " + student.Score + " ";
+    aggregate.appendChild(chevron);
+    footer.appendChild(aggregate);
+    // Add Credit percentage difference
+    var creditPercent = document.createElement(Template[5].tag);
+    setHtml(5, creditPercent);
+    var differenceCredit = Number(master[master.length - 2]) - Number(student.Credit); 
+    if (differenceCredit >= 0) {
+        // Up chevron and limit decimal
+        chevron = document.createElement(Template[19].tag);
+        setHtml(19, chevron);
+    } else {
+        // down chevron and limit decimal
+        chevron = document.createElement(Template[20].tag);
+        setHtml(20, chevron);
+    }
+    chevron.style.fontSize = "20px";
+    chevron.innerHTML = Math.abs(differenceCredit.toFixed(2));
+    creditPercent.innerHTML = "Credit Percentage: " + student.Credit + " ";
+    creditPercent.appendChild(chevron);
+    footer.appendChild(creditPercent);
     div.appendChild(footer);
     return div;
     function setHeaders() {
