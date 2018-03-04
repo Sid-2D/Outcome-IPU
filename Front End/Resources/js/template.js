@@ -64,8 +64,10 @@ var Template = [
     // 11 button dropdown
     {
         "tag": "button",
+        "id": "DropdownButton",
         "class": "btn btn-secondary dropdown-toggle",
         "type": "button",
+        "style": "border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #4C9250;",
         "data-toggle": "dropdown",
         "aria-haspopup": "true",
         "aria-expanded": "false"
@@ -124,6 +126,29 @@ var Template = [
         "class": "fa fa-chevron-down",
         "aria-hidden": "true",
         "style": "color: #cf3333; font-size: 15px"
+    },
+    // 21 Summary/overall button
+    {
+        "tag": "button",
+        "id": "SummaryButton",
+        "style": "background-color: #eee; border-radius: 4px; border: 0.5px solid #ddd; border-bottom-left-radius: 0px; border-top-left-radius: 0px; color: #333;"
+    },
+    // 22 Summary container
+    {
+        "tag": "div",
+        "id": "SummaryContainer",
+        "style": "color: #eee; animation: fadeIn 2s; text-align: left; font-size: 20px; display: none;"
+    },
+    // 23 Summary table
+    {
+        "tag": "table",
+        "style": "color: #fff; animation: fadeIn 1s",
+        "class": "table"
+    },
+    // 24 Report button
+    {
+        "tag": "span",
+        "style": "color:#666; animation: fadeIn 2s; text-align: right; font-size: 16px; margin-left: 5px; margin-top: 5px; display: inline-block; background-color: #fff; border-radius: 4px; padding: 7px;"
     }
 ];
 

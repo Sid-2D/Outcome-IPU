@@ -1,5 +1,6 @@
 var Template = require('./template.js');
 var makeCompTable = require('./compTable.js');
+var makeSummary = require('./summary.js');
 
 var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-', currentSem, marksList = [];
 
@@ -29,6 +30,7 @@ window.findResult = function() {
 function resultTransferComplete() {
     removeProgressBar();
     addNameAndTables();
+    addSummary();
 }
 
 function resultTransferFailed() {
@@ -61,6 +63,14 @@ function addDropDownMenu(list) {
     setHtml(11, dropButton);
     dropButton.innerHTML = "Semester";
     dropContainer.appendChild(dropButton);
+
+    // Summary button
+    var summaryButton = document.createElement(Template[21].tag);
+    setHtml(21, summaryButton);
+    summaryButton.innerHTML = '&nbsp;&nbsp;Overall&nbsp;&nbsp;';
+    summaryButton.onclick = summaryAction;
+    dropContainer.appendChild(summaryButton);
+
     var menu = document.createElement(Template[12].tag);
     setHtml(12, menu);
     var re = false, semNumbers = [];
@@ -93,6 +103,10 @@ function addDropDownMenu(list) {
     }
     dropContainer.appendChild(menu);
     display.appendChild(dropContainer);
+    // Space after menu
+    var space = document.createElement('div');
+    space.style.minHeight = '15px';
+    display.appendChild(space);
 }
 
 var currentActive;
@@ -104,6 +118,20 @@ function dropMenuAction(sem) {
     var div = document.getElementById('sem' + sem);
     div.style.display = '';
     currentActive = div;
+    // Change color
+    document.getElementById('DropdownButton').style.backgroundColor = '#4C9250';
+    document.getElementById('SummaryButton').style.backgroundColor = '#eee';
+}
+
+function summaryAction() {
+    if (currentActive) {
+        currentActive.style.display = 'none';
+    }
+    currentActive = document.getElementById('SummaryContainer');
+    currentActive.style.display = '';
+    // Change color
+    document.getElementById('DropdownButton').style.backgroundColor = '#eee';
+    document.getElementById('SummaryButton').style.backgroundColor = '#4C9250';
 }
 
 function addRankProgressBar(parent) {
@@ -251,6 +279,7 @@ function addNameAndTables() {
             return;
         }
         currentRollNumber = student[0].EnrollmentNumber;
+
         // Name
         var name = document.createElement(Template[0].tag);
         setHtml(0, name);
@@ -260,6 +289,7 @@ function addNameAndTables() {
         // Insert Dropdown
         var reContainer;
         addDropDownMenu(student);
+
         // Table
         for (let i = 0; i < student.length; i++) {
             // Container
@@ -378,6 +408,12 @@ function addNameAndTables() {
             "CollegeCode" : student[i].CollegeCode
         }
     }
+}
+
+function addSummary() {
+    var summary = makeSummary(request.response);
+    // TODO Define summary section
+    display.appendChild(summary);
 }
 
 function setHtml(i, tag) {
