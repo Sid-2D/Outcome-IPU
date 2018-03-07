@@ -9,6 +9,17 @@ window.onload = function() {
     request = new XMLHttpRequest();
     request.addEventListener("load", resultTransferComplete);
     request.addEventListener("error", resultTransferFailed);
+    addIntros();
+}
+
+function addIntros() {
+    for (let i = 1; i <= 4; i++) {
+        setTimeout(() => {
+            let div = document.getElementById('intro' + i);
+            div.style.animation = 'fadeIn 2s';
+            div.style.opacity = '1';
+        }, i * 1000);
+    }
 }
 
 window.findResult = function() {
@@ -25,6 +36,11 @@ window.findResult = function() {
         msg.innerHTML = "Please enter valid roll number.";
         display.appendChild(msg);
     }
+}
+
+window.sampleResult = function() {
+    document.getElementById('rollNumber').value = '00210102714';
+    findResult();
 }
 
 function resultTransferComplete() {
@@ -412,7 +428,6 @@ function addNameAndTables() {
 
 function addSummary() {
     var summary = makeSummary(request.response);
-    // TODO Define summary section
     display.appendChild(summary);
 }
 
