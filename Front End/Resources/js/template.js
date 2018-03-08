@@ -131,7 +131,7 @@ var Template = [
     {
         "tag": "button",
         "id": "SummaryButton",
-        "style": "background-color: #eee; border-radius: 4px; border: 0.5px solid #ddd; border-bottom-left-radius: 0px; border-top-left-radius: 0px; color: #333;"
+        "style": "background-color: #eee; cursor: pointer; border-radius: 4px; border: 0.5px solid #ddd; border-bottom-left-radius: 0px; border-top-left-radius: 0px; color: #333;"
     },
     // 22 Summary container
     {
@@ -148,7 +148,7 @@ var Template = [
     // 24 Report button
     {
         "tag": "span",
-        "style": "color:#666; animation: fadeIn 2s; text-align: right; font-size: 16px; margin-left: 5px; margin-top: 5px; display: inline-block; background-color: #fff; border-radius: 4px; padding: 7px;"
+        "style": "color:#333; cursor: pointer; animation: fadeIn 2s; text-align: right; font-size: 16px; margin-left: 5px; margin-top: 5px; display: inline-block; background-color: #fff; border-radius: 4px; padding: 7px;"
     }
 ];
 
