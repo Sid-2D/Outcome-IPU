@@ -10,13 +10,21 @@ function makeSummary(response) {
 	// Heading
 	var headingConatiner = document.createElement('div');
 	headingConatiner.style.width = '100%';
+	headingConatiner.style.marginTop = '10px';
 
-	var heading = document.createElement('div');
+	var reportButton = document.createElement('span');
+	setHtml(25, reportButton);
+	reportButton.innerHTML = 'Report <i class="fa fa-download"></i>';
+
+	reportButton.onclick = reportClick.bind(null, response, reportButton);
+
+	var heading = document.createElement('span');
 	heading.style.color = '#999';
-	heading.style.fontSize = '27px';
+	heading.style.fontSize = '24px';
 	heading.innerHTML = '&nbsp;Summary';
 
 	headingConatiner.appendChild(heading);
+	headingConatiner.appendChild(reportButton);
 	summaryContainer.appendChild(headingConatiner);
 
 	// Table
@@ -73,39 +81,14 @@ function makeSummary(response) {
 	total.innerHTML = `&nbsp;Total: ${totalScore}<br>`;
 	summaryContainer.appendChild(total);
 
-	var reportButtonContainer = document.createElement('div');
-	reportButtonContainer.style.width = '100%';
-	reportButtonContainer.style.textAlign = 'left';
-
-	var reportButton = document.createElement('span');
-	setHtml(24, reportButton);
-	reportButton.innerHTML = 'Report <i class="fa fa-download"></i>';
-
-	var downloadMessage = document.createElement('div');
-	downloadMessage.style.opacity = '0';
-	downloadMessage.innerHTML = '&nbsp;Download will start shortly';
-
-	reportButton.onclick = reportClick.bind(null, response, reportButton, downloadMessage);
-
-	reportButtonContainer.appendChild(reportButton);
-	reportButtonContainer.appendChild(document.createElement('br'));
-	reportButtonContainer.appendChild(downloadMessage);
-
-	summaryContainer.appendChild(reportButtonContainer);
-
 	return summaryContainer;
 }
 
 // --------------------- Helpers ---------------------------
 
-function reportClick(response, button, downloadMessage) {
-	button.style.backgroundColor = '#4C9250';
-	downloadMessage.style.animation = 'fadeIn 2s';
-	downloadMessage.style.opacity = '1';
-	setTimeout(() => {
-		downloadMessage.style.animation = 'fadeOut 2s';
-		downloadMessage.style.opacity = '0';
-	}, 1500);
+function reportClick(response, button) {
+	button.style.backgroundColor = '#d9534f';
+	button.style.color = '#fff';
 	report.completeReport(response);
 }
 

@@ -1,6 +1,7 @@
 var Template = require('./template.js');
 var makeCompTable = require('./compTable.js');
 var makeSummary = require('./summary.js');
+var semReport = require('./report.js').semReport;
 
 var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-', currentSem, marksList = [];
 
@@ -135,8 +136,10 @@ function dropMenuAction(sem) {
     div.style.display = '';
     currentActive = div;
     // Change color
-    document.getElementById('DropdownButton').style.backgroundColor = '#4C9250';
-    document.getElementById('SummaryButton').style.backgroundColor = '#eee';
+    document.getElementById('DropdownButton').style.backgroundColor = '#43a047';
+    document.getElementById('DropdownButton').style.color = '#fff';
+    document.getElementById('SummaryButton').style.backgroundColor = '#fff';
+    document.getElementById('SummaryButton').style.color = '#333';
 }
 
 function summaryAction() {
@@ -146,8 +149,10 @@ function summaryAction() {
     currentActive = document.getElementById('SummaryContainer');
     currentActive.style.display = '';
     // Change color
-    document.getElementById('DropdownButton').style.backgroundColor = '#eee';
-    document.getElementById('SummaryButton').style.backgroundColor = '#4C9250';
+    document.getElementById('DropdownButton').style.backgroundColor = '#fff';
+    document.getElementById('DropdownButton').style.color = '#333';
+    document.getElementById('SummaryButton').style.backgroundColor = '#43a047';
+    document.getElementById('SummaryButton').style.color = '#fff';
 }
 
 function addRankProgressBar(parent) {
@@ -334,6 +339,17 @@ function addNameAndTables() {
             setHtml(1, sem);
             sem.innerHTML = 'Sem ' + student[i].Semester;
             div.appendChild(sem);
+            var reportButton = document.createElement(Template[25].tag);
+            reportButton.setAttribute('id', 'reportButton' + student[i].Semester);
+            setHtml(25, reportButton);
+            reportButton.innerHTML = 'Report <i class="fa fa-download"></i>';
+            reportButton.onclick = (e) => {
+                semReport.call(null, request.response, student[i].Semester);
+                e.srcElement.style.backgroundColor = '#d9534f';
+                e.srcElement.style.color = '#fff';
+            }
+            div.appendChild(reportButton);
+
             // Table
             var tableContainer = document.createElement(Template[2].tag);
             setHtml(2, tableContainer);
