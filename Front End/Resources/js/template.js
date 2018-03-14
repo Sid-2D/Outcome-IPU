@@ -5,11 +5,11 @@ var Template = [
         "id": "Name",
         "style": "color: #999; animation: fadeIn 4s"
     },
-    // 1 h4 Sem
+    // 1 span Sem
     {
-        "tag": "h4",
+        "tag": "span",
         "id": "Sem",
-        "style": "color:#999; animation: fadeIn 3s; text-align: left; margin-left: 5px"
+        "style": "float: left; font-size: 24px; color:#999; animation: fadeIn 3s; text-align: left; margin-left: 5px"
     },
     // 2 div-table
     {
@@ -149,6 +149,11 @@ var Template = [
     {
         "tag": "span",
         "style": "color:#333; cursor: pointer; animation: fadeIn 2s; text-align: right; font-size: 16px; margin-left: 5px; margin-top: 5px; display: inline-block; background-color: #fff; border-radius: 4px; padding: 7px;"
+    },
+    // 25 Sem Report button
+    {
+        "tag": "span",
+        "style": "cursor: pointer; float: right; color:#333; animation: fadeIn 3s; text-align: right; font-size: 16px; margin-right: 5px; background-color: #fff; border-radius: 4px; padding: 4px; margin-bottom: 5px;"
     }
 ];
 

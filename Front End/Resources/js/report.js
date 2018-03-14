@@ -1,7 +1,7 @@
 function semReport(response, semNo) {
 	var report = new jsPDF();
 	var results = JSON.parse(response);
-	var sem = results.findIndex(result => /REGULAR/gi.test(result.Examination) && (parseInt(results.Semester) === parseInt(semNo)));
+	var sem = results.findIndex(result => /REGULAR/gi.test(result.Examination) && result.Semester === semNo);
 	addSemData(results[sem], report);
 	var filename = results[0].EnrollmentNumber + '-Sem' + semNo;
 	beginDownload(report, filename);
