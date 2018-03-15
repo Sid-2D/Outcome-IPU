@@ -61,3 +61,17 @@ html {
         transform: translate(0, 0);
     }
 }
+@keyframes glowing {
+    0% { 
+        box-shadow: 0 0 -10px #bada55; 
+    }
+    40% { 
+        box-shadow: 0 0 20px #bada55; 
+    }
+    60% { 
+        box-shadow: 0 0 20px #bada55; 
+    }
+    100% { 
+        box-shadow: 0 0 -10px #bada55; 
+    }
+}

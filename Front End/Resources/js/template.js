@@ -131,7 +131,7 @@ var Template = [
     {
         "tag": "button",
         "id": "SummaryButton",
-        "style": "background-color: #eee; cursor: pointer; border-radius: 4px; border: 0.5px solid #ddd; border-bottom-left-radius: 0px; border-top-left-radius: 0px; color: #333;"
+        "style": "animation: glowing 3s; animation-iteration-count: 3; animation-delay: 1s; background-color: #eee; cursor: pointer; border-radius: 4px; border: 0.5px solid #ddd; border-bottom-left-radius: 0px; border-top-left-radius: 0px; color: #333;"
     },
     // 22 Summary container
     {
