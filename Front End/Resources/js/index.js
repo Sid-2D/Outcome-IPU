@@ -2,6 +2,7 @@ var Template = require('./template.js');
 var makeCompTable = require('./compTable.js');
 var makeSummary = require('./summary.js');
 var semReport = require('./report.js').semReport;
+Object.assign(window, require('./menu.js'));
 
 var display, request, progressBar, rankContainers = {}, rankData = {}, currentRollNumber, latestResult = '-', currentSem, marksList = [];
 
@@ -25,10 +26,10 @@ function addIntros() {
 
 window.findResult = function() {
     // Initiate request and add progress bar
-    var roll = document.getElementById('rollNumber').value;
+    var roll = document.getElementById('rollNumber').value.replace(/ /g, '');
     addProgressBar();
     if (/^\d{11}$/.test(roll)) {
-        request.open('GET', '/' + roll, true);
+        request.open('GET', '/find/' + roll, true);
         request.send();
     } else {
         removeProgressBar();
@@ -48,6 +49,8 @@ function resultTransferComplete() {
     removeProgressBar();
     addNameAndTables();
     addSummary();
+    // Implemented in menu
+    fixResultHistory(currentRollNumber);
 }
 
 function resultTransferFailed() {
@@ -480,7 +483,7 @@ function createCompRequest(tagNum, enrollmentNumber) {
     var request = new XMLHttpRequest();
     request.addEventListener("load", compTransferSuccess.bind(null, tagNum));
     request.addEventListener("error", compTransferFailed.bind(null, tagNum));
-    request.open('GET', '/' + enrollmentNumber, true);
+    request.open('GET', '/find/' + enrollmentNumber, true);
     request.send();
     function compTransferSuccess(tagNum) {
         // remove progress bar
@@ -501,6 +504,7 @@ function createCompRequest(tagNum, enrollmentNumber) {
     }
     function compTransferFailed(tagNum) {
         // Implement comp fall
+        console.log('Comp not successful!', tagNum);
     }
 }
 
