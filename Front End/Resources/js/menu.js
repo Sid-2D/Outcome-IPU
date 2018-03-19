@@ -1,10 +1,10 @@
 window.addEventListener('popstate', e => {
-	console.log(e.state)
+	// console.log(e.state)
 	if (e.state === null) {
 		reloadIntros();
 	} else if (e.state.type === 'overlay') {
-	    console.log(JSON.stringify(e.state));
-	    console.log(`overlay-${e.state.name}`);
+	    // console.log(JSON.stringify(e.state));
+	    // console.log(`overlay-${e.state.name}`);
 	    document.getElementById(`overlay-${e.state.name}`).style.width = "0%";
 	} else if (e.state.type === 'menu') {
 		document.getElementById('sidebar-menu').style.width = '0';

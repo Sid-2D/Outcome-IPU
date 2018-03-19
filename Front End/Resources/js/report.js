@@ -127,7 +127,7 @@ function addSemData(sem, report) {
 
 function filterSemData(sem) {
 	let data = [];
-	for (let i = 1; i < sem.Marks.length; i++) {
+	for (let i = 0; i < sem.Marks.length; i++) {
 		if (sem.Marks[i].Name.length > 40) {
 			sem.Marks[i].Name = sem.Marks[i].Name.slice(0, 40) + '...';
 		}
