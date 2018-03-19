@@ -24,7 +24,7 @@ app.use('/download', downloader);
 
 app.use(express.static(path.join(__dirname, '/../Front End/dist')));
 
-app.get('/:roll', function (req, res) {
+app.get('/find/:roll', function (req, res) {
 	var cleanRollNumber = sanitize(req.params['roll']);
 	if (!/^\d{11}$/.test(cleanRollNumber)) {
 		return res.send([]);
@@ -60,6 +60,11 @@ app.post('/rank', function (req, res) {
 			db.close();
 		});
 	});
+});
+
+// Default Route
+app.get('*', function (req, res) {
+	res.redirect('/');
 });
 
 app.listen(process.env.PORT || 3001, function () {
