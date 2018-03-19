@@ -20,10 +20,12 @@
     </head>
     <body style="background-color: #282f31; min-height: 100%; overflow-x: hidden; position: relative; padding-bottom: 6rem;">
         <div class="" style="text-align: center; overflow-x: hidden;">            
-            <h1 style="color:#ccc; animation: bounceIn 4s;font-size: 50px; text-align: center; margin: 10px; margin-top: 25px; font-family: Satisfy;">
+            <div style="position: absolute; float: left; margin: 15px 0px 15px 7px; padding: 0px; font-size: 42px; color: #ccc; cursor: pointer; text-align: right;" onclick="openSideBar()">&rsaquo;<span style="opacity: 0; animation: fadeIn 1.5s, fadeOut 2s; animation-delay: 7s; animation-iteration-count: 2; animation-timing-function: ease-out;">&rsaquo;</span><span style="animation: fadeIn 2s, fadeOut 2s; animation-delay: 7.5s; animation-iteration-count: 2; animation-timing-function: ease-out; opacity: 0;">&rsaquo;</span>
+            </div>
+            <h1 style="color:#ccc;font-size: 50px; text-align: center; margin: 25px 10px 5px 10px; font-family: Satisfy; padding: 0;">
                 Outcome
             </h1>
-            <h4 style="color:#ccc;animation: fadeIn 4s; text-align: center; margin: 10px; font-family: Satisfy; text-decoration: underline;">-By Sid-2D</h4>
+            <h4 style="color:#ccc; animation: fadeIn 3s; text-align: center; margin: 0px 20px 20px 20px; font-family: monospace; text-decoration: underline; font-size: 20px; padding: 0;">-IPU Results</h4>
             <div class="row">
                 <div class="col-md-4 offset-md-4">
                     <iframe name="votar" style="display:none;"></iframe>
@@ -37,11 +39,80 @@
                     </form>
                 </div>
             </div>
-            <div id="Display" style="overflow-x: hidden; min-height: 300px"></div>
+            <div id="Display" style="overflow-x: hidden; min-height: 300px">
+                <br>
+                <div class="row" id="intro1" style="opacity: 0; padding: 5px 1px;">
+                    <div class="col-md-4 offset-md-4" style="color:#ccc; text-align: center; font-size: 20px;">CS and ECE results</div>
+                </div>
+                <div class="row" id="intro2" style="opacity: 0; padding: 5px 1px;">
+                    <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Downloadable reports</div>
+                </div>
+                <div class="row" id="intro3" style="opacity: 0; padding: 5px 1px;">
+                    <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Ad-free and open source</div>
+                </div>
+                <div class="row" id="intro4" style="opacity: 0; padding: 5px 1px;">
+                    <div class="col-md-6 offset-md-3" style=" color:#ccc; text-align: center; font-size: 20px;"><span style="cursor: pointer;" onclick="sampleResult()">Not a student? Click <u>here</u> for a sample result</span></div>
+                </div>
+            </div>
         </div>
         <div id="Footer" style="overflow: hidden; position: absolute; right: 0; bottom: 0; left: 0; padding: 0.5rem; overflow-y: scroll; max-height: 100px; background-color: #efefef; text-align: center; font-size: 18px">
             Works best on Chrome and Firefox<br>
-            <a href="https://github.com/Sid-2D/IPU-Result-Parser" onclick="window.open(this.href); return false;" style="font-size: 14px;">Support this open source project here</a>
+            <a href="https://github.com/Sid-2D/IPU-Result-Parser" onclick="window.open(this.href); return false;" style="font-size: 14px;">Open Source</a>
+            <a href="javascript:void(0)" onclick="overlayIn('about'); return false;" style="font-size: 14px;">| About</a>
+            <a href="javascript:void(0)" onclick="overlayIn('contact'); return false;" style="font-size: 14px;">| Contact</a>
+            <a href="javascript:void(0)" onclick="overlayIn('disclaimer'); return false;" style="font-size: 14px;">| Disclaimer</a>
+        </div>
+        <div id="overlay-about" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick="overlayOut('about')">&times;</a>
+            <div class="overlay-content">
+                <div style="font-size: 120%; margin-bottom: 10px;">About Us</div>
+                <p>
+                    We are an open source project and could use your help. Support us on<a href="https://github.com/Sid-2D/Outcome-IPU" style="display: inline; text-decoration: underline;" onclick="window.open(this.href); return false;">Github</a>and if you want your stream/college made available, reach us<a href="https://github.com/Sid-2D/Outcome-IPU/issues" style="display: inline; text-decoration: underline;" onclick="window.open(this.href); return false;" style="display: inline; text-decoration: underline;">here.</a>
+                </p>
+            </div>
+        </div>
+        <div id="overlay-contact" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick="overlayOut('contact')">&times;</a>
+            <div class="overlay-content">
+                <div style="font-size: 120%; margin-bottom: 10px;">Contact Us</div>
+                Any problems with the code? Leave an issue<a href="https://github.com/Sid-2D/Outcome-IPU/issues" onclick="window.open(this.href); return false;" style="display: inline; text-decoration: underline;">here.</a>
+            </div>
+        </div>
+        <div id="overlay-disclaimer" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick="overlayOut('disclaimer')">&times;</a>
+            <div class="overlay-content">
+                <div style="font-size: 120%; margin-bottom: 10px;">Disclaimer</div>Code made available under MIT Licence. Always verify your result with the<a href="http://164.100.158.135/ExamResults/ExamResultsmain.htm" onclick="window.open(this.href); return false;" style="display: inline; text-decoration: underline;">official PDFs.</a>
+            </div>
+        </div>
+        <div id="overlay-features" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick="overlayOut('features')">&times;</a>
+            <div class="overlay-content">
+                <div style="font-size: 120%; margin-bottom: 10px;">Features</div>
+                <ul style="font-size: 90%; text-align: left; margin: 5px;">
+                    <li>Now download your reports and view them offline! Reports available for individual semester as well as all of them combined</li>
+                    <li style="margin-top: 20px;">Overall section - Summary and average of all your available results</li>
+                    <li style="margin-top: 20px;">Class Ranks - See where you stand in your college</li>
+                    <li style="margin-top: 20px;">Compare your result with your classmates by clicking the '+' in class list</li>
+                </ul>
+            </div>
+        </div>
+        <div id="overlay-help" class="overlay">
+            <a href="javascript:void(0)" class="closebtn" onclick="overlayOut('features')">&times;</a>
+            <div class="overlay-content">
+                <div style="font-size: 120%; margin-bottom: 10px;">How to help?</div>
+                <div style="font-size: 90%; text-align: left; margin: 5px;">
+                    Help us by giving suggestions and feedback and if you like what we do, leave us a star on <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU')" style="text-decoration: underline;">Github</span> :)<br><br>
+                    If you are interested in web development, <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU')" style="text-decoration: underline;">fork</span> our code and make your updates to it. Raise an issue <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU/issues')" style="text-decoration: underline;">here</span> if you have any problems in understanding the code.
+                </div>
+            </div>
+        </div>
+        <div id="sidebar-menu" class="sidebar">
+            <a href="javascript:void(0)" class="leftbtn" onclick="closeSideBar()">&#8249;</a>
+            <a href="javascript:void(0)" onclick="overlayIn('about', true); return false;">About</a>
+            <a href="javascript:void(0)" onclick="overlayIn('help', true); return false;">How to help?</a>
+            <a href="javascript:void(0)" onclick="overlayIn('features', true); return false;">Features</a>
+            <div>Made by <span onclick="window.open('https://github.com/Sid-2D');" style="text-decoration: underline; cursor: pointer;">Sid-2D</span>. Always verify your result with the PDFs.</div>
+            <span></span>
         </div>
         <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
