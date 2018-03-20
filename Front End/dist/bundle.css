@@ -74,6 +74,20 @@ html {
     100% { 
         box-shadow: 0 0 -10px #bada55; 
     }
+}
+@keyframes glowingBar {
+    0% { 
+        background-color: #282f31;
+        box-shadow: 0 0 -10px #282f31;   
+    }
+    50% { 
+        background-color: #484f51;
+        box-shadow: 0 0 20px #484f51;  
+    }
+    100% { 
+        background-color: #282f31; 
+        box-shadow: 0 0 -10px #282f31;
+    }
 }.overlay {
     height: 100%;
     width: 0;
