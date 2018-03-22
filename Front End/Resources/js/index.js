@@ -186,6 +186,7 @@ window.getList = function(Sem) {
     rankRequest.addEventListener("error", rankTransferFailed.bind(null, Sem));
     rankRequest.open('POST', '/rank', true);
     rankRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    rankData[Sem]['subject'] = currentRollNumber.substr(6, 3);
     rankRequest.send(JSON.stringify(rankData[Sem]));
 }
 
