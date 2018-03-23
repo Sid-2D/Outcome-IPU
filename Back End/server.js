@@ -6,7 +6,9 @@ var express = require('express'),
 	downloader = require('../Downloader/app.js'),
 	sanitize = require('mongo-sanitize'),
 	url = require('url');
-	
+
+const OLD_LIST = ['027', '072', '028', '073'];
+
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
@@ -29,8 +31,12 @@ app.get('/find/:roll', function (req, res) {
 	if (!/^\d{11}$/.test(cleanRollNumber)) {
 		return res.send([]);
 	}
-	var subject = cleanRollNumber.match(/\d{6}(\d{3})\d{2}/)[1];
-	MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/Result', function (err, db) {
+	var subject = cleanRollNumber.substr(6, 3);
+	var DB_URL = process.env.MONGO_URL_NEW || 'mongodb://localhost:27017/Result';
+	if (OLD_LIST.includes(subject)) {
+		DB_URL = process.env.MONGO_URL_OLD || 'mongodb://localhost:27017/Result';
+	}
+	MongoClient.connect(DB_URL, function (err, db) {
 		if (err) {
 			return res.send(err);			
 		}
@@ -46,7 +52,13 @@ app.get('/find/:roll', function (req, res) {
 });
 
 app.post('/rank', function (req, res) {
-	MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/Result', function (err, db) {
+	var subject = req.body['subject'];
+	delete req.body['subject'];
+	var DB_URL = process.env.MONGO_URL_NEW || 'mongodb://localhost:27017/Result';
+	if (OLD_LIST.includes(subject)) {
+		DB_URL = process.env.MONGO_URL_OLD || 'mongodb://localhost:27017/Result';
+	}
+	MongoClient.connect(DB_URL, function (err, db) {
 		if (err) {
 			return res.send(err);
 		}
