@@ -33,7 +33,7 @@ Result             |  Rank List
 Added downloadable reports and slight front end redesign.
 
 ### Contributors
-Analytics support, feature/layout suggestions and many result PDFs provided by Manika Srivastava.
+Analytics support, feature/layout suggestions and many result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).
 
 ### Note
 * The parsers support parsing of any IPU Result of any course, so raise an issue if you want your course result to be displayed here.
