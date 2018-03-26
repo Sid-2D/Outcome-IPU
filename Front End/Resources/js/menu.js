@@ -36,11 +36,11 @@ function overlayOut(option) {
 
 let once = true
 function fixResultHistory(roll) {
+	window.ga('set', 'page', '/result');
+    window.ga('send', 'pageview');
 	if (once) {
 	    window.history.replaceState(null, { home: true }, '');
 	    window.history.pushState({ type: 'result' }, { home: false }, 'result');
-		window.ga('set', 'page', '/result');
-	    window.ga('send', 'pageview');
 		once = false;
 	}
 }
