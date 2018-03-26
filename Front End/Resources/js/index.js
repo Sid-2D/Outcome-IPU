@@ -270,6 +270,8 @@ function rankTransferComplete(Sem, rankRequest) {
         msg.innerHTML = "An error occured.";
         node.appendChild(msg);
     }
+    // Set history
+    setRankHistory();
     function setHeaders() {
         var headers = ["#", 'Compare', "Name", "Roll Number", "Aggregate"];
         for (let i = 0; i < headers.length; i++) {

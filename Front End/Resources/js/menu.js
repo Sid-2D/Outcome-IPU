@@ -9,18 +9,24 @@ window.addEventListener('popstate', e => {
 	} else if (e.state.type === 'menu') {
 		document.getElementById('sidebar-menu').style.width = '0';
 	}
-}); 
+    window.ga('set', 'page', location.pathname);
+    window.ga('send', 'pageview');
+});
 
 function overlayIn(option, mini) {
     var stateObj = { name: option, type: 'overlay' };
     window.history.replaceState(stateObj, { home: true }, null);
 	if (mini) {
-		console.log(Math.max(parseInt(window.innerWidth * 0.6), 250) + 'px')
+		// console.log(Math.max(parseInt(window.innerWidth * 0.6), 250) + 'px')
 	    document.getElementById(`overlay-${option}`).style.width = Math.max(parseInt(window.innerWidth * 0.6), 250) + 'px';
 	    window.history.pushState(stateObj, { home: false }, /menu/ + option);
+	    window.ga('set', 'page', '/menu/' + option);
+	    window.ga('send', 'pageview');
 	} else {
 	    document.getElementById(`overlay-${option}`).style.width = "100%";
 	    window.history.pushState(stateObj, { home: false }, option);
+	    window.ga('set', 'page', '/' + option);
+	    window.ga('send', 'pageview');
 	}
 }
 
@@ -33,8 +39,16 @@ function fixResultHistory(roll) {
 	if (once) {
 	    window.history.replaceState(null, { home: true }, '');
 	    window.history.pushState({ type: 'result' }, { home: false }, 'result');
+		window.ga('set', 'page', '/result');
+	    window.ga('send', 'pageview');
 		once = false;
 	}
+}
+
+function setRankHistory() {
+    window.history.replaceState({ type: 'result' }, { home: false }, 'rank');
+	window.ga('set', 'page', '/rank');
+    window.ga('send', 'pageview');
 }
 
 function openSideBar() {
@@ -42,13 +56,15 @@ function openSideBar() {
 	var stateObj = { type: 'menu' };
     window.history.replaceState(stateObj, { home: true }, null);
     window.history.pushState(stateObj, { home: false }, 'menu');
+    window.ga('set', 'page', '/menu');
+    window.ga('send', 'pageview');
 }
 
 function closeSideBar() {
     window.history.back();
 }
 
-module.exports = {fixResultHistory, overlayIn, overlayOut, closeSideBar, openSideBar};
+module.exports = {fixResultHistory, overlayIn, overlayOut, closeSideBar, setRankHistory, openSideBar};
 
 // -----------------Helpers---------------------
 
