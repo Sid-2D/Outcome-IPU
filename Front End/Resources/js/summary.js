@@ -89,6 +89,7 @@ function makeSummary(response) {
 function reportClick(response, button) {
 	button.style.backgroundColor = '#d9534f';
 	button.style.color = '#fff';
+	window.ga('send', 'event', 'Report', 'download', 'Complete Report');
 	report.completeReport(response);
 }
 

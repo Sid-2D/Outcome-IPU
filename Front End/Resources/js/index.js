@@ -353,6 +353,7 @@ function addNameAndTables() {
                 semReport.call(null, request.response, student[i].Semester);
                 e.srcElement.style.backgroundColor = '#d9534f';
                 e.srcElement.style.color = '#fff';
+                window.ga('send', 'event', 'Report', 'download', 'Sem Report');
             }
             div.appendChild(reportButton);
 
