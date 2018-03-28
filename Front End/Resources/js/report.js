@@ -38,7 +38,6 @@ function completeReport(response) {
 
 	let offsetY = 52 + 8 * summary.length;
 	let regularResults = results.filter(result => /REGULAR/.test(result.Examination));
-	console.log(regularResults);
 	report.text('Aggregate: ' + (regularResults.reduce((x, y) => { return {Score: x.Score + y.Score} }, {Score: 0}).Score / regularResults.length).toFixed(2), 10, offsetY + 5);
 	report.text('Credits: ' + regularResults.reduce((x, y) => { return {CreditsSecured: x.CreditsSecured + parseInt(y.CreditsSecured)} }, {CreditsSecured: 0}).CreditsSecured, 10, offsetY + 10);
 
