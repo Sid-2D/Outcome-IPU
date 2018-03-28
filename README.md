@@ -32,6 +32,9 @@ Result             |  Rank List
 ### Version 1.2
 Added downloadable reports and slight front end redesign.
 
+### Bug Watchers
+[Vibhor Agrawal](https://github.com/vibhor1997a) - PDF reports aggregate problem.
+
 ### Contributors
 Analytics support, feature/layout suggestions and many result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).
 
