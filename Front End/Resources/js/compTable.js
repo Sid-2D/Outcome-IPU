@@ -1,6 +1,7 @@
 var Template = require('./template.js');
 
 function makeCompTable(response, sem, master) {
+    window.ga('send', 'event', 'Comparison Table', 'Comparison Table', 'Comparison Table');
     var student = JSON.parse(response);
     for (var i = 0; i < student.length; i++) {
         if (student[i].Semester === '0' + sem) {
