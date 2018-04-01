@@ -27,6 +27,8 @@ function addIntros() {
 window.findResult = function() {
     // Initiate request and add progress bar
     var roll = document.getElementById('rollNumber').value.replace(/ /g, '');
+    var uniRankList = document.querySelector('.overlay-content-list');
+    uniRankList.innerHTML = '';
     addProgressBar();
     if (/^\d{11}$/.test(roll)) {
         request.open('GET', '/find/' + roll, true);
@@ -396,6 +398,18 @@ function addNameAndTables() {
                 setHtml(5, cgpa);
                 cgpa.innerHTML = "Credit Percentage: " + student[i].Credit;
                 footer.appendChild(cgpa);
+
+                footer.style.textAlign = 'left';
+                var universityListButton = document.createElement('button');
+                universityListButton.className = 'btn btn-default';
+                universityListButton.innerHTML = 'University List';
+                universityListButton.style.marginBottom = '15px';
+                universityListButton.style.marginLeft = '5px';
+                var rankListData = getRankData(i);
+                rankListData['subject'] = currentRollNumber;
+                universityListButton.onclick = window.rankOverlay.bind(null, rankListData);
+                footer.appendChild(universityListButton);
+
                 var hr = document.createElement(Template[6].tag);
                 setHtml(6, hr);
                 footer.appendChild(hr);

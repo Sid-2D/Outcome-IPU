@@ -1,3 +1,5 @@
+var fillRankData = require('./rankTable.js');
+
 window.addEventListener('popstate', e => {
 	// console.log(e.state)
 	if (e.state === null) {
@@ -6,6 +8,10 @@ window.addEventListener('popstate', e => {
 	    // console.log(JSON.stringify(e.state));
 	    // console.log(`overlay-${e.state.name}`);
 	    document.getElementById(`overlay-${e.state.name}`).style.width = "0%";
+	    if (e.state.name === 'list') {
+	    	document.querySelector('.overlay-content-list').innerHTML = '';
+	    	document.querySelector('#list-header').classList.remove('sticky-header'); 
+	    }
 	} else if (e.state.type === 'menu') {
 		document.getElementById('sidebar-menu').style.width = '0';
 	}
@@ -28,6 +34,17 @@ function overlayIn(option, mini) {
 	    window.ga('set', 'page', '/' + option);
 	    window.ga('send', 'pageview');
 	}
+}
+
+function rankOverlay(body) {
+	var stateObj = { name: 'list', type: 'overlay' };
+    window.history.replaceState(stateObj, { home: true }, null);
+    document.getElementById(`overlay-list`).style.width = "100%";
+    window.history.pushState(stateObj, { home: false }, 'list');
+    document.querySelector('#list-header').classList.add('sticky-header');
+    // window.ga('set', 'page', '/university-rank');
+    // window.ga('send', 'pageview');
+    fillRankData(body);
 }
 
 function overlayOut(option) {
@@ -64,7 +81,7 @@ function closeSideBar() {
     window.history.back();
 }
 
-module.exports = {fixResultHistory, overlayIn, overlayOut, closeSideBar, setRankHistory, openSideBar};
+module.exports = {fixResultHistory, overlayIn, overlayOut, closeSideBar, setRankHistory, openSideBar, rankOverlay};
 
 // -----------------Helpers---------------------
 

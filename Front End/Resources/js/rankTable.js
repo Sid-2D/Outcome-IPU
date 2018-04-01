@@ -22,19 +22,37 @@ function createRankTable(rankData) {
     var tbody = document.createElement('tbody');
     var tr = document.createElement('tr');
     setHeaders();
-    // Start populating table
-    for (let j = 0; j < rankData.Students.length; j++) {
-        tr = document.createElement('tr');
-        var th = document.createElement('th');
-        th.setAttribute('scope', 'row');
-        th.innerHTML = j + 1;
-        tr.appendChild(th);
-        for (let k = 0; k < 3; k++) {
-            var td = document.createElement('td');
-            td.innerHTML = rankData.Students[j][tableEntries[k]];
-            tr.appendChild(td);
+    var startPos = 0;
+    for (let i = 0; i < rankData.Students.length; i++) {
+        if (rankData.Students[i].Scores > 100) {
+            continue;
+        } else {
+            startPos = i;
+            break;
         }
-        tbody.appendChild(tr);
+    }
+    // Start populating table
+    for (let i = startPos; i <= rankData.Students.length; i += 10) {
+        setTimeout(addTen.bind(null, i), 100 + i * 10);
+        function addTen(i) {
+            for (let j = i; j < i + Math.min(rankData.Students.length - i, 10); j++) {
+                tr = document.createElement('tr');
+                tr.setAttribute('id', 'roll-' + rankData.Students[j][tableEntries[1]]);
+                var th = document.createElement('th');
+                th.setAttribute('scope', 'row');
+                th.innerHTML = j + 1 - startPos;
+                tr.appendChild(th);
+                for (let k = 0; k < 3; k++) {
+                    var td = document.createElement('td');
+                    td.innerHTML = rankData.Students[j][tableEntries[k]];
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+                if (j >= rankData.Students.length - 10) {
+                    document.querySelector('#control-panel #reload').style.display = 'none';
+                }
+            }
+        }
     }
     table.appendChild(tbody);
     // Add table to current container
@@ -62,8 +80,46 @@ function createRankTable(rankData) {
 }
 
 function fillRankData(body) {
+    var request = new XMLHttpRequest();
     var rankDisplay = document.querySelector('.overlay-content-list');
-    rankDisplay.appendChild(createRankTable(data));
+    rankDisplay.innerHTML = '';
+    // Create rank request
+    request.addEventListener("load", rankTransferComplete.bind(null, request));
+    request.addEventListener("error", rankTransferFailed.bind(null));
+    request.open('POST', '/university-rank', true);
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    body['subject'] = body['subject'].substr(6, 3);
+    delete body['CollegeCode'];
+    request.send(JSON.stringify(body));
+    document.querySelector('#control-panel #reload').style.display = '';
+    function rankTransferComplete() {
+        // console.log(request.response);
+        var data = JSON.parse(request.response);
+        rankDisplay.appendChild(createRankTable(data));
+    }
+
+    function rankTransferFailed() {
+
+    }
+}
+
+window.rankListSearch = () => {
+    var query = document.getElementById('rankListQuery').value;
+    var row = document.querySelector(`#overlay-list #roll-${query}`);
+    if (row) {
+        // Scroll particular row in view
+        row.scrollIntoView();
+        var overlayList = document.querySelector(`#overlay-list`);
+        if ((overlayList.scrollHeight - overlayList.scrollTop) > (window.innerHeight)) {
+            overlayList.scrollTop -= 75;
+        }
+        row.style.animation = 'flicker 2s';
+        setTimeout(() => {
+            row.style.animation = '';
+        }, 2000);
+    } else {
+        // Do something
+    }
 }
 
 module.exports = fillRankData
