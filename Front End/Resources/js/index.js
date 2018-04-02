@@ -15,7 +15,7 @@ window.onload = function() {
 }
 
 function addIntros() {
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         setTimeout(() => {
             let div = document.getElementById('intro' + i);
             div.style.animation = 'fadeIn 2s';

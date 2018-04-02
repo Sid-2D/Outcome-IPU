@@ -33,7 +33,7 @@ function createRankTable(rankData) {
     }
     // Start populating table
     for (let i = startPos; i <= rankData.Students.length; i += 10) {
-        setTimeout(addTen.bind(null, i), 100 + i * 10);
+        setTimeout(addTen.bind(null, i), 150 + i * 5);
         function addTen(i) {
             for (let j = i; j < i + Math.min(rankData.Students.length - i, 10); j++) {
                 tr = document.createElement('tr');
@@ -48,7 +48,7 @@ function createRankTable(rankData) {
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
-                if (j >= rankData.Students.length - 10) {
+                if (j >= rankData.Students.length - 1 - startPos) {
                     document.querySelector('#control-panel #reload').style.display = 'none';
                 }
             }

@@ -42,8 +42,8 @@ function rankOverlay(body) {
     document.getElementById(`overlay-list`).style.width = "100%";
     window.history.pushState(stateObj, { home: false }, 'list');
     document.querySelector('#list-header').classList.add('sticky-header');
-    // window.ga('set', 'page', '/university-rank');
-    // window.ga('send', 'pageview');
+    window.ga('set', 'page', '/university-rank');
+    window.ga('send', 'pageview');
     fillRankData(body);
 }
 
@@ -92,7 +92,7 @@ function reloadIntros() {
 }
 
 function addIntros() {
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         setTimeout(() => {
             let div = document.getElementById('intro' + i);
             div.style.animation = 'fadeIn 2s';
