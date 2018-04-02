@@ -74,6 +74,29 @@ app.post('/rank', function (req, res) {
 	});
 });
 
+app.post('/university-rank', function (req, res) {
+	var subject = req.body['subject'];
+	delete req.body['subject'];
+	var DB_URL = process.env.MONGO_URL_NEW || 'mongodb://localhost:27017/Result';
+	if (OLD_LIST.includes(subject)) {
+		DB_URL = process.env.MONGO_URL_OLD || 'mongodb://localhost:27017/Result';
+	}
+	MongoClient.connect(DB_URL, function (err, db) {
+		if (err) {
+			return res.send(err);
+		}
+		var clean = sanitize(req.body);
+		db.collection('University').findOne({_id: clean}, function (err, doc) {
+			if (err) {
+				db.close();
+				return res.send(err);				
+			}
+			res.send(doc);
+			db.close();
+		});
+	});
+});
+
 // Default Route
 app.get('*', function (req, res) {
 	res.redirect('/');

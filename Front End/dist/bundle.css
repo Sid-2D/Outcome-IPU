@@ -88,6 +88,11 @@ html {
         background-color: #282f31; 
         box-shadow: 0 0 -10px #282f31;
     }
+}
+@keyframes flicker {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
 }.overlay {
     height: 100%;
     width: 0;
@@ -198,4 +203,28 @@ html {
   .sidebar {padding-top: 30px;}
   .sidebar a {font-size: 18px;}
   .sidebar div {font-size: 14px;}
+}
+
+.sticky-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 3;
+    background-color: #111;
+}
+
+.sticky-header + .overlay-content-list {
+    padding-top: 90px;
+}
+
+.overlay-content-list {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 30px;
+    color: #818181;
+    display: block;
+    transition: 1s;
 }

@@ -48,9 +48,12 @@
                     <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Downloadable reports</div>
                 </div>
                 <div class="row" id="intro3" style="opacity: 0; padding: 5px 1px;">
-                    <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Ad-free and open source</div>
+                    <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">University/Class ranks</div>
                 </div>
                 <div class="row" id="intro4" style="opacity: 0; padding: 5px 1px;">
+                    <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Ad-free and open source</div>
+                </div>
+                <div class="row" id="intro5" style="opacity: 0; padding: 5px 1px;">
                     <div class="col-md-6 offset-md-3" style=" color:#ccc; text-align: center; font-size: 20px;"><span style="cursor: pointer;" onclick="sampleResult()">Not a student? Click <u>here</u> for a sample result</span></div>
                 </div>
             </div>
@@ -92,6 +95,7 @@
                     <li>Now download your reports and view them offline! Reports available for individual semester as well as all of them combined</li>
                     <li style="margin-top: 20px;">Overall section - Summary and average of all your available results</li>
                     <li style="margin-top: 20px;">Class Ranks - See where you stand in your college</li>
+                    <li style="margin-top: 20px;">University Ranks - Compare yourself to students of the entire University in your stream</li>
                     <li style="margin-top: 20px;">Compare your result with your classmates by clicking the '+' in class list</li>
                 </ul>
             </div>
@@ -104,6 +108,26 @@
                     Help us by giving suggestions and feedback and if you like what we do, leave us a star on <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU')" style="text-decoration: underline;">Github</span> :)<br><br>
                     If you are interested in web development, <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU')" style="text-decoration: underline;">fork</span> our code and make your updates to it. Raise an issue <span onclick="window.open('https://github.com/Sid-2D/Outcome-IPU/issues')" style="text-decoration: underline;">here</span> if you have any problems in understanding the code.
                 </div>
+            </div>
+        </div>
+        <div id="overlay-list" class="overlay" style="opacity: 1;">
+            <div id="list-header" class="">
+                <div class="row" style="margin-top: 5px;">
+                  <div class="offset-md-4 col-md-4">
+                    <div class="input-group">
+                      <input id="rankListQuery" type="text" class="form-control" placeholder="Roll Number in list">
+                      <span class="input-group-btn">
+                        <button class="btn btn-danger" type="button" onclick="rankListSearch()">Search</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div id="control-panel" style="color: #fff; text-align: center; font-size: 21px;">
+                  <span id="reload" style="display: none; float: left; margin-left: 5px; margin-top: 5px;"><i class="fa fa-circle-o-notch fa-spin"></i></span><span onclick="document.querySelector('#overlay-list').scrollTop = 0;"><i class="fa fa-arrow-up"></i></span>&nbsp;&nbsp;&nbsp;<span onclick="document.querySelector('#overlay-list').scrollTop = document.querySelector('#overlay-list').scrollHeight;"><i class="fa fa-arrow-down"></i></span><span onclick="overlayOut('list');">&nbsp;&nbsp;&nbsp;<i class="fa fa-times"></i></span>
+                </div>
+            </div>
+            <div class="overlay-content-list" data-filled="false">
+                
             </div>
         </div>
         <div id="sidebar-menu" class="sidebar">
