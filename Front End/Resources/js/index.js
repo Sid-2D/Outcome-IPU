@@ -402,7 +402,7 @@ function addNameAndTables() {
                 footer.style.textAlign = 'left';
                 var universityListButton = document.createElement('button');
                 universityListButton.className = 'btn btn-default';
-                universityListButton.innerHTML = 'University List';
+                universityListButton.innerHTML = 'University Ranks';
                 universityListButton.style.marginBottom = '15px';
                 universityListButton.style.marginLeft = '5px';
                 var rankListData = getRankData(i);
@@ -420,7 +420,7 @@ function addNameAndTables() {
                 setHtml(9, rankContainers[student[i].Semester]);
                 var button = document.createElement(Template[10].tag);
                 setHtml(10, button);
-                button.innerHTML = "Class List";
+                button.innerHTML = "College Ranks";
                 button.setAttribute("onclick", (function(Sem){return "getList("+Sem+")";})(student[i].Semester));
                 rankContainers[student[i].Semester].appendChild(button);
                 div.appendChild(rankContainers[student[i].Semester]);
