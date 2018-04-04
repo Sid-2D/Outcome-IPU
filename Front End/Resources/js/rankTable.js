@@ -88,13 +88,15 @@ function fillRankData(body) {
     request.addEventListener("error", rankTransferFailed.bind(null));
     request.open('POST', '/university-rank', true);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    body['subject'] = body['subject'].substr(6, 3);
+    if (body['subject'].length > 6) {
+        body['subject'] = body['subject'].substr(6, 3);
+    }
     delete body['CollegeCode'];
     request.send(JSON.stringify(body));
     document.querySelector('#control-panel #reload').style.display = '';
-    function rankTransferComplete() {
-        // console.log(request.response);
-        var data = JSON.parse(request.response);
+
+    function rankTransferComplete(req) {
+        var data = JSON.parse(req.response);
         rankDisplay.appendChild(createRankTable(data));
     }
 
