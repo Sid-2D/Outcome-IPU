@@ -113,14 +113,16 @@
         <div id="overlay-list" class="overlay" style="opacity: 1;">
             <div id="list-header" class="">
                 <div class="row" style="margin-top: 5px;">
-                  <div class="offset-md-4 col-md-4">
-                    <div class="input-group">
-                      <input id="rankListQuery" type="text" class="form-control" placeholder="Search your roll number">
-                      <span class="input-group-btn">
-                        <button class="btn btn-danger" type="button" onclick="rankListSearch()">Search</button>
-                      </span>
+                    <div class="offset-md-4 col-md-4">
+                        <form class="form-inline" style="align-items: center; display: flex; margin-bottom: 0" method="GET" target="votar">
+                            <div class="input-group">
+                              <input id="rankListQuery" type="text" class="form-control" size="100" placeholder="Search your roll number" required>
+                              <div class="input-group-btn">
+                                <button type="submit" class="btn btn-danger" onclick="rankListSearch()">Search</button>
+                              </div>
+                            </div>
+                        </form>
                     </div>
-                  </div>
                 </div>
                 <div id="control-panel" style="color: #fff; text-align: center; font-size: 21px;">
                   <span id="reload" style="display: none; float: left; margin-left: 5px; margin-top: 5px;"><i class="fa fa-circle-o-notch fa-spin"></i></span><span onclick="document.querySelector('#overlay-list').scrollTop = 0;"><i class="fa fa-arrow-up"></i></span>&nbsp;&nbsp;&nbsp;<span onclick="document.querySelector('#overlay-list').scrollTop = document.querySelector('#overlay-list').scrollHeight;"><i class="fa fa-arrow-down"></i></span><span onclick="overlayOut('list');">&nbsp;&nbsp;&nbsp;<i class="fa fa-times"></i></span>
