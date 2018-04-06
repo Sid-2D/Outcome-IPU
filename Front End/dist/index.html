@@ -28,8 +28,7 @@
             <h4 style="color:#ccc; animation: fadeIn 3s; text-align: center; margin: 0px 20px 20px 20px; font-family: monospace; text-decoration: underline; font-size: 20px; padding: 0;">-IPU Results</h4>
             <div class="row">
                 <div class="col-md-4 offset-md-4">
-                    <iframe name="votar" style="display:none;"></iframe>
-                    <form class="form-inline" style="align-items: center; display: flex; margin-bottom: 0" method="GET" target="votar">
+                    <form class="form-inline" style="align-items: center; display: flex; margin-bottom: 0" onsubmit="return false;">
                         <div class="input-group">
                           <input id="rollNumber" type="text" class="form-control" size="100" placeholder="IPU Roll Number" required>
                           <div class="input-group-btn">
@@ -114,9 +113,9 @@
             <div id="list-header" class="">
                 <div class="row" style="margin-top: 5px;">
                     <div class="offset-md-4 col-md-4">
-                        <form class="form-inline" style="align-items: center; display: flex; margin-bottom: 0" method="GET" target="votar">
+                        <form class="form-inline" style="align-items: center; display: flex; margin-bottom: 0" onsubmit="return false;">
                             <div class="input-group">
-                              <input id="rankListQuery" type="text" class="form-control" size="100" placeholder="Search your roll number" required>
+                              <input id="rankListQuery" type="text" class="form-control" size="100" pattern="\d{11}" placeholder="Search your roll number" oninvalid="this.setCustomValidity('Please enter a valid roll number')" oninput="setCustomValidity('')">
                               <div class="input-group-btn">
                                 <button type="submit" class="btn btn-danger" onclick="rankListSearch()">Search</button>
                               </div>
