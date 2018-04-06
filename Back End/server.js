@@ -3,7 +3,6 @@ var express = require('express'),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require('body-parser'),
 	path = require('path'),
-	downloader = require('../Downloader/app.js'),
 	sanitize = require('mongo-sanitize'),
 	url = require('url');
 
@@ -21,8 +20,6 @@ app.use(function (req, res, next) {
 app.set('view engine', 'ejs');
 
 app.set('views', path.join(__dirname, '/../Downloader/views'));
-
-app.use('/download', downloader);
 
 app.use(express.static(path.join(__dirname, '/../Front End/dist')));
 
