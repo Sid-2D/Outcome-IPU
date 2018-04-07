@@ -34,10 +34,12 @@ Added downloadable reports and slight front end redesign.
 
 ### Bug Watchers
 [Vibhor Agrawal](https://github.com/vibhor1997a) - PDF reports aggregate problem.
+[Nikhil Yadav](https://github.com/sam1803) - PDF parsing.
 
 ### Contributors
 Analytics support, feature/layout suggestions and many result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).
 
 ### Note
+
 * The parsers support parsing of any IPU Result of any course, so raise an issue if you want your course result to be displayed here.
 * Works best on Chrome and Firefox.
