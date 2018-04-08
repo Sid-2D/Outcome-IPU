@@ -33,7 +33,7 @@ Result             |  Rank List
 Added downloadable reports and slight front end redesign.
 
 ### Bug Watchers
-[Vibhor Agrawal](https://github.com/vibhor1997a) - PDF reports aggregate problem.
+[Vibhor Agrawal](https://github.com/vibhor1997a) - PDF reports aggregate problem.  
 [Nikhil Yadav](https://github.com/sam1803) - PDF parsing.
 
 ### Contributors
