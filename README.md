@@ -37,7 +37,9 @@ Added downloadable reports and slight front end redesign.
 [Nikhil Yadav](https://github.com/sam1803) - PDF parsing.
 
 ### Contributors
-Analytics support, feature/layout suggestions and many result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).
+Analytics support, feature/layout suggestions and many result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).  
+
+Link sharing and awareness creation for the project provided by Raghav Sharma.
 
 ### Note
 
