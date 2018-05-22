@@ -1,6 +1,6 @@
 let intro = '<br> \
 			<div class="row" id="intro1" style="opacity: 0; padding: 5px 1px;"> \
-                <div class="col-md-4 offset-md-4" style="color:#ccc; text-align: center; font-size: 20px;">CS, IT, EEE, ECE, MAE results</div> \
+                <div class="col-md-4 offset-md-4" style="color:#ccc; text-align: center; font-size: 20px;">CS, IT, EEE, ECE, MAE, MCA results</div> \
             </div> \
             <div class="row" id="intro2" style="opacity: 0; padding: 5px 1px;"> \
                 <div class="col-md-4 offset-md-4" style=" color:#ccc; text-align: center; font-size: 20px;">Downloadable reports</div> \
