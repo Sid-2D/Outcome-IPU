@@ -78,7 +78,7 @@ function makeSummary(response) {
 	summaryContainer.appendChild(tableContainer);
 
 	var total = document.createElement('span');
-	total.innerHTML = `&nbsp;Total: ${totalScore}<br>`;
+	total.innerHTML = `&nbsp;Aggregate Percentage: ${totalScore}<br>`;
 	summaryContainer.appendChild(total);
 
 	return summaryContainer;
