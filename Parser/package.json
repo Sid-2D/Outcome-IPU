@@ -9,7 +9,9 @@
     "ranks": "node HelperScripts/setRanks.js",
     "start": "node Result-Parser.js",
     "upload": "node Upload/parseAndUpload.js",
-    "upload-linux": "node Upload/parseAndUploadLinux.js"
+    "upload-linux": "node Upload/parseAndUploadLinux.js",
+    "aggregate": "node HelperScripts/setAggregate.js",
+    "university": "node HelperScripts/setUniversityRanks.js"
   },
   "author": "Sid",
   "license": "ISC",
