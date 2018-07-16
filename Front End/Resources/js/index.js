@@ -369,6 +369,7 @@ function addNameAndTables() {
             var tr = document.createElement("tr");
             setHeaders();
             // Start populating table
+            student[i].SemTotal = 0;
             for (let j = 0; j < student[i].Marks.length; j++) {
                 tr = document.createElement("tr");
                 var th = document.createElement("th");
@@ -381,6 +382,7 @@ function addNameAndTables() {
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
+                student[i].SemTotal += student[i].Marks[j][tableEntries['Total']];
             }
             table.appendChild(tbody);
             // Add table to display
@@ -392,7 +394,8 @@ function addNameAndTables() {
                 setHtml(4, footer);
                 var total = document.createElement(Template[5].tag);
                 setHtml(5, total);
-                total.innerHTML = "Aggregate: " + student[i].Score;
+                // TODO: Add total marks obtained in sem
+                total.innerHTML = "Aggregate: " + student[i].Score + ` (${student[i].SemTotal}/${student[i].Marks.length * 100})`;
                 footer.appendChild(total);
                 var cgpa = document.createElement(Template[5].tag);
                 setHtml(5, cgpa);
