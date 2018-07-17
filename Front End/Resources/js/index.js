@@ -382,7 +382,7 @@ function addNameAndTables() {
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
-                student[i].SemTotal += student[i].Marks[j][tableEntries['Total']];
+                student[i].SemTotal += student[i].Marks[j]['Total'];
             }
             table.appendChild(tbody);
             // Add table to display
