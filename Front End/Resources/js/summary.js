@@ -67,7 +67,7 @@ function makeSummary(response) {
 		tr.appendChild(th);
 		tr.appendChild(td1);
 		tr.appendChild(td2);
-
+		console.log(result)
 		tbody.appendChild(tr);
 	});
 
@@ -78,7 +78,7 @@ function makeSummary(response) {
 	summaryContainer.appendChild(tableContainer);
 
 	var total = document.createElement('span');
-	total.innerHTML = `&nbsp;Aggregate Percentage: ${totalScore}<br>`;
+	total.innerHTML = `&nbsp;Aggregate : ${totalScore} (Semester Wise)<br>`;
 	summaryContainer.appendChild(total);
 
 	return summaryContainer;
@@ -96,8 +96,8 @@ function reportClick(response, button) {
 function setHtml(i, tag) {
     var keys = Object.keys(template[i]);
     keys.forEach(function(key) {
-        if (key !== 'tag') {
-            tag.setAttribute(key, template[i][key]);
+        if (key !== 'tag') {           
+        	tag.setAttribute(key, template[i][key]);
         }
     });
 }
@@ -110,7 +110,11 @@ function filterResponse(response) {
 			filterResponse.push({
 				'Sem': result.Semester,
 				'Score': result.Score,
-				'Credits': result.CreditsSecured
+				'Credits': result.CreditsSecured,
+				'MarksObtained': result.Marks.reduce((total, subject) => {
+					return total + subject.Total
+				}, 0),
+				'TotalMarks': result.Marks.length * 100
 			});
 		}
 	})
