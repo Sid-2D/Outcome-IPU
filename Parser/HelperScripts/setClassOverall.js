@@ -8,19 +8,20 @@ MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost/Result', funct
 	}
 	db.collection("Analyze").aggregate([
 		{ $match: { "_id.Batch": { $gte: "2014" } } },
+		{ $unwind: "$Students" },
+		{ $group: {
+			_id: { Programme: "$_id.Programme", Batch: "$_id.Batch", CollegeCode: "$_id.CollegeCode", Roll: "$Students.EnrollmentNumber", Name: "$Students.Name" },
+			Results: { $push: "$Students.Scores" },
+			Average: { $avg: "$Students.Scores" },
+			Semesters: { $sum: 1 }
+		} },
 		{ $group: {
 			_id: { Programme: "$_id.Programme", Batch: "$_id.Batch", CollegeCode: "$_id.CollegeCode" },
-			Semesters: { $push: { Sem: "$_id.Semester", Students: "$Students" } },
+			Students: { $push: { Name: "$_id.Name", EnrollmentNumber: "$_id.Roll", Average: "$Average", Semesters: "$Semesters" } },
+			count: { $sum: 1 }
 		} },
-		// { $unwind: "$Students" },
-		// { $sort: { "Students.Scores": -1 } },
-		// { $group: {
-		// 	_id: "$_id",
-		// 	Students: { $push: "$Students" },
-		// 	count: { $sum: 1 }
-		// } },
 		{ $project: { 
-			Semesters: 1,
+			Students: 1,
 			count: 1
 		} },
 		{ $out: "ClassOverall" }
