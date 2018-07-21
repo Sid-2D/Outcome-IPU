@@ -11,7 +11,6 @@ MongoClient.connect(process.env.MONGO_URL || 'mongodb://localhost/Result', funct
 		{ $unwind: "$Students" },
 		{ $group: {
 			_id: { Programme: "$_id.Programme", Batch: "$_id.Batch", CollegeCode: "$_id.CollegeCode", Roll: "$Students.EnrollmentNumber", Name: "$Students.Name" },
-			Results: { $push: "$Students.Scores" },
 			Average: { $avg: "$Students.Scores" },
 			Semesters: { $sum: 1 }
 		} },

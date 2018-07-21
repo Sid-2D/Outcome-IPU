@@ -37,7 +37,7 @@ function makeSummary(response) {
 	var thead = document.createElement('thead');
 	var tr = document.createElement('tr');
 	var th = [];
-	['Sem', 'Aggregate', 'Credits'].forEach(heading => {
+	['Sem', 'Marks', 'Aggregate', 'Credits'].forEach(heading => {
 		let head = document.createElement('th');
 		head.innerHTML = heading;
 		th.push(head);
