@@ -17,10 +17,6 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.set('view engine', 'ejs');
-
-app.set('views', path.join(__dirname, '/../Downloader/views'));
-
 app.use(express.static(path.join(__dirname, '/../Front End/dist')));
 
 app.get('/find/:roll', function (req, res) {
@@ -87,6 +83,29 @@ app.post('/university-rank', function (req, res) {
 			if (err) {
 				db.close();
 				return res.send(err);				
+			}
+			res.send(doc);
+			db.close();
+		});
+	});
+});
+
+app.post('/overall-classrank', function (req, res) {
+	var subject = req.body['subject'];
+	delete req.body['subject'];
+	var DB_URL = process.env.MONGO_URL_NEW || 'mongodb://localhost:27017/Result';
+	if (OLD_LIST.includes(subject)) {
+		DB_URL = process.env.MONGO_URL_OLD || 'mongodb://localhost:27017/Result';
+	}
+	MongoClient.connect(DB_URL, function (err, db) {
+		if (err) {
+			return res.send(err);
+		}
+		var clean = sanitize(req.body);
+		db.collection('ClassOverall').findOne({_id: clean}, function (err, doc) {
+			if (err) {
+				db.close();
+				return res.send(err);	
 			}
 			res.send(doc);
 			db.close();
