@@ -153,6 +153,7 @@ function summaryAction() {
     }
     currentActive = document.getElementById('SummaryContainer');
     currentActive.style.display = '';
+    window.ga('send', 'event', 'Overall', 'click', 'Overall Section');
     // Change color
     document.getElementById('DropdownButton').style.backgroundColor = '#fff';
     document.getElementById('DropdownButton').style.color = '#333';

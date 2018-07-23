@@ -205,6 +205,9 @@ function sendListRequest(response, parent, progressContainer) {
     request.send(JSON.stringify(studentInfo));
 
     function overallTransferComplete() {
+	    window.history.replaceState({ type: 'result' }, { home: false }, 'overall-classrank');
+		window.ga('set', 'page', '/overall-classrank');
+	    window.ga('send', 'pageview');
     	progressContainer.style.animation = 'fadeOut 1s';
     	progressContainer.style.opacity = '0';
     	// Add table here
