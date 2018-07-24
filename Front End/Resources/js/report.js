@@ -15,7 +15,8 @@ function completeReport(response) {
 
 	var columns = [
         {title: "Sem", dataKey: "sem"},
-        {title: "Score", dataKey: "score"},
+        {title: "Marks", dataKey: "marks"},
+        {title: "Percentage", dataKey: "percentage"},
         {title: "Credits", dataKey: "credits"}
     ];
 
@@ -36,7 +37,7 @@ function completeReport(response) {
 	    columnStyles: {text: {columnWidth: 'auto'}}
 	});
 
-	let offsetY = 52 + 8 * summary.length;
+	let offsetY = 52 + 8 * (summary.length + 1);
 	let regularResults = results.filter(result => /REGULAR/.test(result.Examination));
 	report.text('Aggregate: ' + (regularResults.reduce((x, y) => { return {Score: x.Score + y.Score} }, {Score: 0}).Score / regularResults.length).toFixed(2), 10, offsetY + 5);
 	report.text('Credits: ' + regularResults.reduce((x, y) => { return {CreditsSecured: x.CreditsSecured + parseInt(y.CreditsSecured)} }, {CreditsSecured: 0}).CreditsSecured, 10, offsetY + 10);
@@ -55,13 +56,25 @@ function completeReport(response) {
 	// --------------------Helpers----------------------
     function summaryTableData() {
     	let data = []
+    	let totalMarks = 0, totalPercentage = 0, totalCredits = 0, totalMarksObtained = 0 
 		for (let i = 0; i < summary.length; i++) {
+			totalMarksObtained += summary[i].MarksObtained
+			totalCredits += parseInt(summary[i].Credits)
+			totalPercentage += summary[i].Score
+			totalMarks += summary[i].TotalMarks
 		    data.push({
 		        sem: summary[i].Sem,
-		        score: summary[i].Score,
+		        marks: `${summary[i].MarksObtained}/${summary[i].TotalMarks}`,
+		        percentage: summary[i].Score,
 		        credits: summary[i].Credits
 		    });
 		}
+		data.push({
+			sem: '',
+			marks: `${totalMarksObtained}/${totalMarks}`,
+			percentage: totalPercentage,
+			credits: totalCredits
+		})
 		return data;
     }
 
@@ -89,7 +102,11 @@ function filterSummary(response) {
 			filterResponse.push({
 				'Sem': result.Semester,
 				'Score': result.Score,
-				'Credits': result.CreditsSecured
+				'Credits': result.CreditsSecured,
+				'MarksObtained': result.Marks.reduce((total, subject) => {
+					return total + subject.Total
+				}, 0),
+				'TotalMarks': result.Marks.length * 100
 			});
 		}
 	})
