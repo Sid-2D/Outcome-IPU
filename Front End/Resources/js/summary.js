@@ -90,6 +90,7 @@ function makeSummary(response) {
 	finalMarks.innerHTML = `${marks}/${marksSum}`;
 	finalRow.appendChild(finalMarks);
 	
+	totalScore = (totalScore / results.length).toFixed(2);
 	finalScore.style.textAlign = 'center';
 	finalScore.innerHTML = totalScore;
 	finalRow.appendChild(finalScore);
@@ -98,7 +99,6 @@ function makeSummary(response) {
 	finalRow.appendChild(finalCredits);
 	tbody.appendChild(finalRow);
 
-	totalScore = (totalScore / results.length).toFixed(2);
 
 	let tableEnd = document.createElement('hr');
 	tableEnd.style.background = '#fff';

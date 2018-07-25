@@ -72,7 +72,7 @@ function completeReport(response) {
 		data.push({
 			sem: '',
 			marks: `${totalMarksObtained}/${totalMarks}`,
-			percentage: totalPercentage,
+			percentage: (totalPercentage/summary.length).toFixed(2),
 			credits: totalCredits
 		})
 		return data;
