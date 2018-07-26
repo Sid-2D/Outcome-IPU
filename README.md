@@ -1,6 +1,6 @@
 # Outcome for IPU
 
-A single page [web app](https://outcome-ipu.herokuapp.com) that provides results to IP University students in a tabular form and also displays the class list of the student. All it needs is the student's Roll Number and it fetches all the results available in the database.
+A single page [web app](https://outcome-ipu.herokuapp.com) that provides results to IP University students in a tabular form and also displays the class ranks, university ranks, aggregate result summary of the student. One can also download their individual result in a PDF form and use it when offline. All it needs is the student's Roll Number and it fetches all the results available in the database.
 
 ### From
 ![PDF](Screenshots/PdfScaled.png)
@@ -37,11 +37,9 @@ Added downloadable reports and slight front end redesign.
 [Nikhil Yadav](https://github.com/sam1803) - PDF parsing.
 
 ### Contributors
-Analytics support, feature/layout suggestions and many B.Tech result PDFs provided by [Manika Shrivastava](https://about.me/manikashrivastava).  
-
-All MCA result PDFs provided by [Natasha Malik](https://github.com/NatashaMalik-50).
-
-Link sharing and awareness creation for the project provided by Raghav Sharma.  
+[Manika Shrivastava](https://about.me/manikashrivastava) - Analytics support, feature/layout suggestions and many B.Tech result PDFs.  
+[Natasha Malik](https://github.com/NatashaMalik-50) - All MCA result PDFs.  
+Raghav Sharma - Link sharing and awareness creation for the project.  
 
 ### Note
 
