@@ -5,7 +5,7 @@ var currentSubjects = [];	// Stores the names and subject codes for current set 
 var previousResult = {};
 
 module.exports = function (data, subjectArray, db, cb) {
-	var regexForStudentsLinux = /\d{11}([^]*?)\n\w?\*?(\(..?\))?\n\w\w?\n\r/g;
+	var regexForStudentsLinux = /\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\n\w\w?\n/g;
 	var regexForStudentsWindows = /\n\d{11}([^]*?)\n\w\w?\*?(\(..?\))?\r\n\w\w?\r/g;
 	// console.log(data)
 	// process.exit()
@@ -59,6 +59,8 @@ module.exports = function (data, subjectArray, db, cb) {
 					obj.CreditsSecured = '';
 				}
 				var present = false;
+				// Get rid of unwanted data.
+				student.shift(); student.shift();
 				while (student.length) {
 					var marks = marksBlueprint();
 					var id = student.shift();
