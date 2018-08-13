@@ -92,16 +92,16 @@ module.exports = function (data, subjectArray, db, cb) {
 				if (!present) {
 					return;
 				}
-				db.collection('Student').insert(obj, function (err) {
-					if (err) {
-						console.error(err);
-					}
-				});
 				final[len++] = obj;
 			});
 		}	
 	});
-	cb(final);
+	db.collection('Student').insertMany(final, { ordered: false }, function (err) {
+        if (err) {
+           console.error(err);
+        }
+		cb(final);
+	});
 }
 
 var studentBlueprint = function () {
