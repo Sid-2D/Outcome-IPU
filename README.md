@@ -41,6 +41,10 @@ Added downloadable reports and slight front end redesign.
 [Natasha Malik](https://github.com/NatashaMalik-50) - All MCA result PDFs.  
 Raghav Sharma - Link sharing and awareness creation for the project.  
 
+### Updating Reappear Results  
+The site currently doesn't support automatic updating of reappear results. However we can manually update them accordingly if you leave a comment on this [issue](https://github.com/Sid-2D/Outcome-IPU/issues/10).
+
+
 ### Note
 
 * The parsers support parsing of any IPU Result of any course, so raise an issue if you want your course result to be displayed here.
